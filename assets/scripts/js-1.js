@@ -63,7 +63,7 @@ function intervalFunction() {
 
         const rects = document.querySelectorAll('.rect');
 
-        console.log("jetzt");
+        // console.log("jetzt");
         rects.forEach((rect) => {
             rect.remove();
         });
@@ -72,7 +72,7 @@ function intervalFunction() {
 
     rectCount = countSlider.value;
 
-    console.log(rectCount + " " + countSlider.value);
+    //console.log(rectCount + " " + countSlider.value);
 }
 
 function moveRight() {

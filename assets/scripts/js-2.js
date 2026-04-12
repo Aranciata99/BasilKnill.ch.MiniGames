@@ -111,7 +111,7 @@ function setupGame() {
 
     //Setup Solution & Level Display
 
-    solution.style.backgroundImage = "url(assets/2-images/bildZwei" + level + ".jpg)";
+    solution.style.backgroundImage = "url(../assets/2-images/bildZwei" + level + ".jpg)";
     levelDisplay.textContent = level;
 }
 
@@ -127,7 +127,7 @@ function loadTilesAgain() {
         imageTiles[i].style.left = moveTileXpos[i] + "px";
         imageTiles[i].style.top = moveTileYpos[i] + "px";
         imageTiles[i].style.visibility = "visible";
-        imageTiles[i].style.backgroundImage = "url(assets/2-images/bildZwei" + level + "/bildZwei" + level + "-" + (randomizeArray[i] + 1) + ".jpg)";
+        imageTiles[i].style.backgroundImage = "url(../assets/2-images/bildZwei" + level + "/bildZwei" + level + "-" + (randomizeArray[i] + 1) + ".jpg)";
     }
 
     //set not used Tile away
@@ -381,7 +381,7 @@ lastLevelButton.addEventListener("click", () => {
 });
 
 function updateLevelDisplay() {
-    solution.style.backgroundImage = "url(assets/2-images/bildZwei" + level + ".jpg)";
+    solution.style.backgroundImage = "url(../assets/2-images/bildZwei" + level + ".jpg)";
     levelDisplay.textContent = level;
 }
 

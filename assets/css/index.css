@@ -161,64 +161,66 @@ p a:hover {
     cursor: pointer;
 }
 
-/* Sites */
-
-/* index Home */
-
-
-
-.container {
-    padding-inline: 20px;
-    padding-bottom: 0;
+input {
+    -webkit-appearance: none;
+    background: transparent;
+    background-color: black;
+    height: var(--buttonBorderSize);
 }
 
-.containerBottom {
-    padding-inline: 20px;
-    padding-top: 100%;
+input::-webkit-slider-thumb {
+    -webkit-appearance: none;
 }
 
-h1 {
-    padding-top: 0;
-    padding-bottom: 150%;
-    text-align: center;
-    line-height: 0.9;
-    font-size: 2.2rem;
+input:focus {
+    outline: none;
 }
 
-small {
-    font-size: 1rem;
+input::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
 }
 
-h2 {
-    text-align: center;
-    font-size: 0.8rem;
-    padding-inline: 20%;
-    padding-top: 75%;
-    padding-bottom: 75%;
-    line-height: 0.9;
-
+input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: var(--buttonBorderSize) solid black;
+    height: calc(var(--fixedGridSize)/5*3);
+    width: calc(var(--fixedGridSize)/5*3);
+    border-radius: 100px;
+    background: white;
+    cursor: pointer;
+    margin-top: -14px;
 }
 
-p {
-    font-size: 1.2rem;
-    hyphens: auto;
-    line-height: 1;
+/* All the same stuff for Firefox */
+input::-moz-range-thumb {
+    border: var(--buttonBorderSize) solid black;
+    height: calc(var(--fixedGridSize)/5*3);
+    width: calc(var(--fixedGridSize)/5*3);
+    border-radius: 100px;
+    background: white;
+    cursor: pointer;
 }
 
-h3 {
-    padding-top: 0;
-    padding-bottom: 0;
-    text-align: center;
-    line-height: 1;
-    font-size: 3rem;
+/* All the same stuff for IE */
+input::-ms-thumb {
+    border: var(--buttonBorderSize) solid black;
+    height: calc(var(--fixedGridSize)/5*3);
+    width: calc(var(--fixedGridSize)/5*3);
+    border-radius: 100px;
+    background: white;
+    cursor: pointer;
 }
 
-/* Main */
+/* fixed stuff */
 
-.navigation {
+.fixedNavigation {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: var(--gridSize);
+    right: var(--gridSize);
     z-index: 100;
 }
 
@@ -232,15 +234,57 @@ h3 {
 }
 
 .settings {
+    position: absolute;
+    top: var(--gridSize);
+    left: var(--gridSize);
     z-index: 100;
+    line-height: 1.75;
 }
 
 .settings label {
     position: relative;
-    top: -7px;
+    padding-left: 5px;
     color: black;
     font-size: 1rem;
     line-height: 0;
+}
+
+/* Sites */
+
+/* index Home */
+
+.inhaltsverzeichnis {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    bottom: 33%;
+    transform: translate(0, -50%);
+    text-align: center;
+}
+
+.inhaltsverzeichnis button {
+    margin-bottom: 5px;
+}
+
+.inhaltsverzeichnisRandom {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 33%;
+    transform: translate(0, -50%);
+    text-align: center;
+}
+
+/* 1 - bounce */
+
+.container {
+    padding-inline: 20px;
+    padding-bottom: 0;
+}
+
+.containerBottom {
+    padding-inline: 20px;
+    padding-top: 100%;
 }
 
 /* ZWEI */
@@ -354,5 +398,24 @@ h3 {
     :root {
         --gridSize: 15px;
     }
-    
+
+    /*hover*/
+
+    .link:hover,
+    h2 a:hover {
+        font-style: normal;
+        text-decoration: none;
+    }
+
+    p a:hover {
+        font-style: normal;
+    }
+
+    .buttonBlackA:hover,
+    .buttonBlackB:hover,
+    .buttonWhiteA:hover,
+    .buttonWhiteB:hover {
+        padding-inline: 10px;
+    }
+
 }
