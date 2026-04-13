@@ -1,3 +1,8 @@
+<?php
+$currentPage = basename(__FILE__, '.php');
+require '../snippets/siteNames.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,11 +10,9 @@
     <?php
     require '../snippets/head.php';
     ?>
-    <title>Bounce</title>
 </head>
 
 <body>
-
 
     <div class="settings">
         <input type="range" id="Speed" name="Speed" min="0" max="2" value="1" step="0.1" />
@@ -26,7 +29,6 @@
 
 
     <?php
-    $currentPage = basename(__FILE__, '.php');
     require '../snippets/siteNavigation.php';
     ?>
 

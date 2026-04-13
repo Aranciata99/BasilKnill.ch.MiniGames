@@ -1,3 +1,8 @@
+<?php
+$currentPage = basename(__FILE__, '.php');
+require '../snippets/siteNames.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +39,6 @@
     <!-- navigation & scripts -->
 
     <?php
-    $currentPage = basename(__FILE__, '.php');
     require '../snippets/siteNavigation.php';
     ?>
 

@@ -192,7 +192,6 @@ input::-webkit-slider-thumb {
     border-radius: 100px;
     background: white;
     cursor: pointer;
-    margin-top: -14px;
 }
 
 /* All the same stuff for Firefox */
@@ -253,29 +252,22 @@ input::-ms-thumb {
 
 /* index Home */
 
-.inhaltsverzeichnis {
-    position: absolute;
-    width: 100%;
-    height: auto;
-    bottom: 33%;
-    transform: translate(0, -50%);
-    text-align: center;
-}
-
 .inhaltsverzeichnis button {
-    margin-bottom: 5px;
+    position: absolute;
+    transform: translate(-50%, 0);
+    /* margin-bottom: 5px; */
 }
 
 .inhaltsverzeichnisRandom {
     position: absolute;
     width: 100%;
     height: auto;
-    top: 33%;
+    top: 50%;
     transform: translate(0, -50%);
     text-align: center;
 }
 
-/* 1 - bounce */
+/* 1 - Bounce */
 
 .container {
     padding-inline: 20px;
@@ -287,7 +279,7 @@ input::-ms-thumb {
     padding-top: 100%;
 }
 
-/* ZWEI */
+/* 2 – Puzzle */
 
 .playfield {
     position: absolute;
@@ -358,7 +350,7 @@ input::-ms-thumb {
     z-index: 9;
 }
 
-/* DREI */
+/* 3 – Snake */
 
 .snakeHead {
     position: absolute;
@@ -392,6 +384,8 @@ input::-ms-thumb {
     font-size: 2rem;
     z-index: 1;
 }
+
+/* 4 – TicTacToe */
 
 @media (max-width: 770px) {
 

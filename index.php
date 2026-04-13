@@ -1,3 +1,7 @@
+<?php
+require './snippets/siteNames.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,27 +20,27 @@
     ?>
 
     <div class="inhaltsverzeichnisRandom">
-        <button class="buttonBlackA" onclick="location.href='sites/<?php echo rand(1, $siteAmmount); ?>.php'">Random</button> <br>
+        <button id="radnomButton" class="buttonBlackA" onclick="location.href='sites/<?php echo rand(1, $siteAmmount); ?>.php'">Random</button> <br>
     </div>
-
 
     <div class="inhaltsverzeichnis">
 
         <?php
 
-        $siteNames = ["Bounce", "Puzzle", "Snake"]; // add site by add string here
         $page = 1;
 
         foreach ($siteNames as $name) {
             echo
             "<button class='buttonWhiteB' onclick='location.href=\"sites/$page.php\"'>
-            $page – $name
+            $name
             </button> <br>";
             $page++;
         }
         ?>
 
     </div>
+
+    <script src="./assets/scripts/js-0.js"></script>
 
 </body>
 

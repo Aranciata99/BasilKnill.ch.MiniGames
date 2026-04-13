@@ -10,17 +10,12 @@ require '../snippets/siteNames.php';
     <?php
     require '../snippets/head.php';
     ?>
-    <title>Snake</title>
 </head>
 
 <body>
 
-    <div class="snakePointsCounter" id="snakePointsCounter">
-    </div>
+    
 
-    <div class="snakeHead" id="head">
-
-    </div>
 
 
     <!-- navigation & scripts -->
