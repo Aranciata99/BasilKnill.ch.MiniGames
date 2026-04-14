@@ -240,6 +240,15 @@ input::-ms-thumb {
     line-height: 1.75;
 }
 
+.settingsRight {
+    position: absolute;
+    top: var(--gridSize);
+    right: var(--gridSize);
+    z-index: 100;
+    transform: translate(-50%, 0);
+
+}
+
 .settings label {
     position: relative;
     padding-left: 5px;
@@ -356,7 +365,7 @@ input::-ms-thumb {
     position: absolute;
     background-color: white;
     box-sizing: border-box;
-    border: 5px solid black;
+    border: calc(var(--buttonBorderSize)*2) solid black;
     border-radius: 100%;
     z-index: 10;
 }
@@ -387,6 +396,88 @@ input::-ms-thumb {
 
 /* 4 – TicTacToe */
 
+.tictactoeplayfield {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 75vmin;
+    height: 75vmin;
+    transform: translate(-50%, -50%);
+    /*border: solid red 1px;*/
+    display: grid;
+    grid-template-columns: repeat(3, 0fr);
+    grid-template-rows: repeat(3, 0fr);
+}
+
+.tictactoeTiles {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 25vmin;
+    height: 25vmin;
+    cursor: pointer;
+    border: none;
+}
+
+.tictactoeGridLine {
+    position: absolute;
+    border: solid black var(--buttonBorderSize);
+    z-index: 100;
+}
+
+.tictactoeCrosses {
+    position: absolute;
+    width: 20vmin;
+    height: 20vmin;
+    display: block;
+    transform: translate(2.5vmin, 2.5vmin);
+    display: none;
+}
+
+.tictactoeCrosses div {
+    position: absolute;
+    width: 25vmin;
+    box-sizing: border-box;
+    border: calc(var(--buttonBorderSize)) solid #e6e6e6;
+}
+
+.tictactoeCircles {
+    position: absolute;
+    box-sizing: border-box;
+    border: calc(var(--buttonBorderSize)*2) solid #e6e6e6;
+    border-radius: 100%;
+    width: 20vmin;
+    height: 20vmin;
+    display: none;
+    transform: translate(2.5vmin, 2.5vmin);
+}
+
+.tttDisplayPlayerOne,
+.tttDisplayPlayerTwo {
+    position: absolute;
+    height: 60%;
+    width: 25%;
+    text-align: center;
+}
+
+.tttDisplayPlayerOne {
+    bottom: 0;
+}
+
+.tttDisplayPlayerTwo {
+    right: 0;
+    bottom: 0;
+}
+
+.tttDisplayCount small {
+    color: black;
+}
+
+.tttDisplayCount p {
+    color: black;
+    text-align: center;
+}
+
 @media (max-width: 770px) {
 
     :root {
@@ -410,6 +501,31 @@ input::-ms-thumb {
     .buttonWhiteA:hover,
     .buttonWhiteB:hover {
         padding-inline: 10px;
+    }
+
+    /* TicTacToe */
+
+    .tttDisplayPlayerOne,
+    .tttDisplayPlayerTwo {
+        height: 50%;
+        width: 100%;
+        top: 10%;
+        left: 0;
+        text-align: center;
+    }
+
+    .tttDisplayPlayerTwo {
+        top: 75%;
+        right: 0;
+    }
+
+    .tttDisplayCount small {
+        color: black;
+    }
+
+    .tttDisplayCount p {
+        color: black;
+        text-align: center;
     }
 
 }

@@ -14,7 +14,35 @@ require '../snippets/siteNames.php';
 
 <body>
 
-    
+    <div class="settings">
+        Computer: <button class="buttonWhiteB" id="computerButton">ON</button>
+    </div>
+
+    <div class="settingsRight">
+        O
+    </div>
+
+    <div class="tttDisplayCount">
+
+        <div class="tttDisplayPlayerOne">
+            <small id="playerOneName"></small>
+            <p id="playerOneCount"></p>
+            <small>×</small>
+        </div>
+        <div class="tttDisplayPlayerTwo">
+            <small id="playerTwoName"></small>
+            <p id="playerTwoCount"></p>
+            <small>o</small>
+        </div>
+
+    </div>
+
+    <div class="tictactoeplayfield" id="playField">
+        <div style="height: 99%; left: 33.3333%" class="tictactoeGridLine"></div>
+        <div style="height: 99%; left: 66.6666%" class="tictactoeGridLine"></div>
+        <div style="width: 99%; top: 33.3333%" class="tictactoeGridLine"></div>
+        <div style="width: 99%; top: 66.6666%" class="tictactoeGridLine"></div>
+    </div>
 
 
 
