@@ -170,7 +170,6 @@ function checkIfSomeoneWins() {
             baseTilesStatus[0] == 1 && baseTilesStatus[4] == 1 && baseTilesStatus[8] == 1 ||
             baseTilesStatus[2] == 1 && baseTilesStatus[4] == 1 && baseTilesStatus[6] == 1
         ) {
-            console.log("PLAYER 1 – × – WINS!");
             alert("PLAYER 1 – × – WINS!");
             playerOneCount++; //Cross
             loadNewGame(0);
@@ -187,14 +186,16 @@ function checkIfSomeoneWins() {
             baseTilesStatus[0] == 2 && baseTilesStatus[4] == 2 && baseTilesStatus[8] == 2 ||
             baseTilesStatus[2] == 2 && baseTilesStatus[4] == 2 && baseTilesStatus[6] == 2
         ) {
-            console.log("PLAYER 2 – o – WINS!");
-            alert("PLAYER 2 – o – WINS!");
+            if (isComputerOn) {
+                alert("COMPUTER – o – WINS!");
+            } else {
+                alert("PLAYER 2 – o – WINS!");
+            }
             playerTwoCount++; //Circle
             loadNewGame(1);
         }
     }
     else {
-        console.log("NO ONE WINS!");
         alert("NO ONE WINS!");
         if (whoIsPlaying == 1) {
             loadNewGame(0);

@@ -15,7 +15,7 @@ require '../snippets/siteNames.php';
 <body>
 
     <div class="settings">
-        Computer: <button class="buttonWhiteB" id="computerButton">ON</button>
+        <small style="color: black; margin-right: 10px;">Computer:</small> <button class="buttonWhiteB" id="computerButton">ON</button>
     </div>
 
     <div class="settingsRight">

@@ -507,25 +507,31 @@ input::-ms-thumb {
 
     .tttDisplayPlayerOne,
     .tttDisplayPlayerTwo {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
         height: 50%;
         width: 100%;
-        top: 10%;
+        top: 12%;
         left: 0;
         text-align: center;
     }
 
     .tttDisplayPlayerTwo {
-        top: 75%;
+        top: 80%;
         right: 0;
+        text-align: center;
     }
 
     .tttDisplayCount small {
         color: black;
+        text-align: center;
+        line-height: 3;
     }
 
     .tttDisplayCount p {
         color: black;
         text-align: center;
+        line-height: 0;
     }
 
 }
