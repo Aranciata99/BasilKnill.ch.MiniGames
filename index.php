@@ -40,6 +40,12 @@ require './snippets/siteNames.php';
 
     </div>
 
+    <div style=" position: absolute; width: 100%;  text-align: center; bottom: 20px;">
+        <small style="color: black;">
+            All code by <a style="color: black; text-decoration: underline;" href="https://basilknill.ch/">basilknill.ch</a>
+        </small>
+    </div>
+
     <script src="./assets/scripts/js-0.js"></script>
 
 </body>

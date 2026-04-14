@@ -10,4 +10,3 @@
 <meta property="og:url" content="games.basilknill.ch">
 <meta property="og:site_name" content="Mini Games Basil Knill">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title><?php echo $siteNames[$currentPage - 1]; ?></title>

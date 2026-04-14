@@ -10,6 +10,7 @@ require '../snippets/siteNames.php';
     <?php
     require '../snippets/head.php';
     ?>
+    <title>Bounce</title>
 </head>
 
 <body>
