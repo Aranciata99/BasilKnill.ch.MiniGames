@@ -111,7 +111,7 @@ p a:hover {
     font-size: 0.75rem;
     cursor: pointer;
     line-height: 0;
-    padding-top: 2px;
+    padding-top: 3px;
     margin-right: calc(var(--fixedGridSize)/6);
 
 }
@@ -478,6 +478,17 @@ input::-ms-thumb {
     text-align: center;
 }
 
+/* 10000 */
+
+.wuerfel {
+    position: relative;
+    width: calc(var(--fixedGridSize)*1.2);
+    height: calc(var(--fixedGridSize)*1.2);
+    border-radius: 6px;
+    transform: translate(-50%, -50%);
+    transition: 0.4s ease;
+}
+
 @media (max-width: 770px) {
 
     :root {
@@ -519,6 +530,7 @@ input::-ms-thumb {
     .tttDisplayPlayerTwo {
         top: 80%;
         right: 0;
+        height: 0;
         text-align: center;
     }
 

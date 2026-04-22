@@ -1,3 +1,27 @@
+//Random Numbers
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+function randomFloat(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+//Würfel
+
+// <?php
+//     $farbe = "weiss";
+//     //$farbe = "schwarz";
+//     $menge = 6;
+
+//     for ($i = 1; $i < $menge + 1; $i++) {
+//         echo "<div class='wuerfel'>
+//         <img src='../assets/wuerfelpunkte/$farbe/wuerfel$i.png'>
+//         </div>";
+//     };
+//     ?>
+
 /*
 //write text inside the rectangle
 document.getElementById("rect").innerHTML = "Aranchiata";
@@ -110,7 +134,7 @@ console.log(isTowerHeight);
 
 //summ all
 
-let y = summAll(1, 3, 9);   
+let y = summAll(1, 3, 9);
 
 function summAll() {
     let sum = 0;

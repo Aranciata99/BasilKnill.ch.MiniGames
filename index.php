@@ -48,6 +48,11 @@ require './snippets/siteNames.php';
 
     <script src="./assets/scripts/js-0.js"></script>
 
+    <!-- Imprint -->
+    <!-- Website programming by © Basil Knill -->
+    <!-- basilknill.ch -->
+    <!-- Imprint -->
+
 </body>
 
 </html>
