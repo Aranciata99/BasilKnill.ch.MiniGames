@@ -15,10 +15,12 @@ require '../snippets/siteNames.php';
 
 <body>
 
+    <div class="background" id="background">
+    </div>
 
     <?php
     $menge = 5;
-     
+
     for ($i = 1; $i < $menge + 1; $i++) {
         echo "<div class='wuerfel'>
         <img> 
@@ -26,7 +28,12 @@ require '../snippets/siteNames.php';
     };
     ?>
 
-    <p style="color: gray; text-align: center;">Site Under Construction</p>
+    <div class="settingsCenter">
+        <p style="color: black; font-size: 3rem; line-height: 0; text-align: center;"><span id="currentCounter"></span></p>
+        <p style="color: black; line-height: 0; text-align: center;">+ <span id="addcounter"></span></p>
+    </div>
+
+    <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 10px; left: 50%; transform: translate(-50%, 0);">TAKE POINTS</button>
 
     <!-- navigation & scripts -->
 

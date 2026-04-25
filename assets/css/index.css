@@ -222,6 +222,14 @@ input::-ms-thumb {
     right: var(--gridSize);
     z-index: 100;
 }
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
 
 .rect {
     position: absolute;
@@ -246,7 +254,23 @@ input::-ms-thumb {
     right: var(--gridSize);
     z-index: 100;
     transform: translate(-50%, 0);
+}
 
+.settingsCenter {
+    position: absolute;
+    display: inline;
+    top: var(--gridSize);
+    right: 50%;
+    z-index: 100;
+}
+
+.settingsCenterBottom {
+    position: absolute;
+    display: inline;
+    bottom: var(--gridSize);
+    left: 50%;
+    z-index: 100;
+    transform: translate(-50%, 0);
 }
 
 .settings label {
@@ -481,12 +505,13 @@ input::-ms-thumb {
 /* 10000 */
 
 .wuerfel {
-    position: relative;
+    position: fixed;
     width: calc(var(--fixedGridSize)*1.2);
     height: calc(var(--fixedGridSize)*1.2);
     border-radius: 6px;
     transform: translate(-50%, -50%);
     transition: 0.4s ease;
+    z-index: 9999;
 }
 
 @media (max-width: 770px) {
