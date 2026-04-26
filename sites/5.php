@@ -28,12 +28,20 @@ require '../snippets/siteNames.php';
     };
     ?>
 
-    <div class="settingsCenter">
-        <p style="color: black; font-size: 3rem; line-height: 0; text-align: center;"><span id="currentCounter"></span></p>
-        <p style="color: black; line-height: 0; text-align: center;">+ <span id="addcounter"></span></p>
+    <div class="settings">
+        <small style="color: black; line-height: 0; text-align: center;">Player:</small>
+        <div class="playerNamesContainer" id="playerNamesContainer">
+        </div>
+        <button class="buttonWhiteB" id="addPlayerButton" style="margin-top: 20px;">+</button>
+        <button class="buttonWhiteB" id="deletePlayerButton" style="margin-top: 20px;">–</button>
     </div>
 
-    <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 10px; left: 50%; transform: translate(-50%, 0);">TAKE POINTS</button>
+    <div class="settingsCenter">
+        <p style="color: black; font-size: 2rem; line-height: 1; text-align: center;">+ <span id="currentCounter"></span></p>
+        <!-- <small><span id="displayWhoIsPlaying">Basil</span></small> -->
+    </div>
+
+    <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 20px; left: 50%; transform: translate(-50%, 0); z-index: 9999;">TAKE POINTS</button>
 
     <!-- navigation & scripts -->
 

@@ -172,6 +172,13 @@ input::-webkit-slider-thumb {
     -webkit-appearance: none;
 }
 
+.settings input {
+    background-color: white;
+    height: calc(var(--fixedGridSize)/5*3);
+    border: none;
+    border-bottom: var(--buttonBorderSize) solid black;
+}
+
 input:focus {
     outline: none;
 }
@@ -222,6 +229,7 @@ input::-ms-thumb {
     right: var(--gridSize);
     z-index: 100;
 }
+
 .background {
     position: fixed;
     top: 0;
@@ -257,11 +265,11 @@ input::-ms-thumb {
 }
 
 .settingsCenter {
-    position: absolute;
-    display: inline;
+    position: fixed;
     top: var(--gridSize);
-    right: 50%;
+    left: 50%;
     z-index: 100;
+    transform: translate(-50%, 0);
 }
 
 .settingsCenterBottom {
@@ -272,6 +280,16 @@ input::-ms-thumb {
     z-index: 100;
     transform: translate(-50%, 0);
 }
+
+.settingsCenter small {
+    position: absolute;
+    color: black;
+    line-height: 0;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
 
 .settings label {
     position: relative;
@@ -512,6 +530,15 @@ input::-ms-thumb {
     transform: translate(-50%, -50%);
     transition: 0.4s ease;
     z-index: 9999;
+}
+
+.playerNamesContainer label {
+    display: block;
+    margin-top: 10px;
+}
+
+.playerNamesContainer input::placeholder {
+    color: lightgray;
 }
 
 @media (max-width: 770px) {
