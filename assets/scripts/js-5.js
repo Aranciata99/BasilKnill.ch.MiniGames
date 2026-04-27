@@ -1,10 +1,6 @@
 /*
 
-– 3er gewürfelt
-    – fail Points Counter Poition on the right side –> dreier gewürfelt muss deaktiviert sein und einfluss haben
-    – Wenn drilling bereits gewürfelt = noch aktiv / Booster
-
-– 2 5er ein 1er
+– Coice if throw all again on restart
 – Würfel nicht übereinander
 – check if all Player Names Put in
 – Z-Index, was ist zuoberst?
@@ -12,6 +8,14 @@
 – was passiert wenn player entfernt und who is playing += playerCount
 – Animation Points / Win Lose etc.
 – Computer
+– ruleset
+– Win state of a Person
+– Throw dice Zone
+– Test Mobile
+
+Bugs
+– Dubble Fives works not correctly every Time
+– hover nur eingeschaltet wenn gewürfelt = nicht in der Mitte + nicht rechts
 
 */
 
@@ -36,7 +40,12 @@ let collectedPosOnTrow;
 //tripple
 let trippleThrown = false;
 let trippleNumber;
+let trippleChance = false;
+let anoterTrippleIsCollected = 3;
 
+//double five
+let doubleFive = false;
+let fivesPos = [];
 
 //count
 
@@ -76,7 +85,7 @@ wuerfel.forEach((w, index) => {
     w.style.top = (window.innerHeight / 3) + (40 * index) + "px";
     w.style.left = window.innerWidth / 2 + "px";
     w.style.transform = `rotate(0deg)`;
-    wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 1 + ".png";
+    wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
 });
 
 function setDiceInCenter() {
@@ -90,7 +99,7 @@ function setDiceInCenter() {
         w.style.top = (window.innerHeight / 3) + (40 * index) + "px";
         w.style.left = window.innerWidth / 2 + "px";
         w.style.transform = `rotate(0deg)`;
-        wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 1 + ".png";
+        wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
     });
 
     count = 0;
@@ -136,6 +145,9 @@ function throwDice() {
     //Check if three thrown
     areThreeSameThrown();
 
+    //Check if two 5s thrown
+    areTwoFivesThrown();
+
     collectedPosOnTrow = collectedPos;
     firstThrow = false;
 }
@@ -153,45 +165,51 @@ wuerfel.forEach((w, index) => {
                             selectDice(triple, i, 0, true);
                             diceStatus[i] = true;
                         } else {
-                            selectDice(triple, i, trippleNumber * 100, true);
+                            if (trippleNumber != 1) {
+                                selectDice(triple, i, trippleNumber * 100, true);
+                            } else {
+                                selectDice(triple, i, 1000, true);
+                            }
                             diceStatus[i] = true;
                         }
                         trippleCounter++;
                     }
                 });
 
+                trippleThrown = false;
+
             } else {
                 if (diceNumber[index] == 1 && diceStatus[index] == false && diceNumber[index] != trippleNumber) {
                     selectDice(w, index, 100, true);
                     diceStatus[index] = true;
-                } else if (diceNumber[index] == 1 && diceStatus[index] == true) {
-                    selectDice(w, index, -100, false);
-                    diceStatus[index] = false;
                 }
 
                 if (diceNumber[index] == 5 && diceStatus[index] == false) {
                     selectDice(w, index, 50, true);
                     diceStatus[index] = true;
-                } else if (diceNumber[index] == 5 && diceStatus[index] == true) {
-                    selectDice(w, index, -50, false);
-                    diceStatus[index] = false;
                 }
             }
         } else {
-            if (diceNumber[index] == 1 && diceStatus[index] == false && diceNumber[index] != trippleNumber) {
+            if (diceNumber[index] == trippleNumber && trippleChance) {
+                if (trippleNumber != 1) {
+                    selectDice(w, index, trippleNumber * 100, true);
+                    diceStatus[index] = true;
+                } else {
+                    selectDice(w, index, 1000, true);
+                    diceStatus[index] = true;
+                }
+                anoterTrippleIsCollected = 0;
+            } else if (diceNumber[index] == 1 && diceStatus[index] == false && diceNumber[index] != trippleNumber) {
                 selectDice(w, index, 100, true);
                 diceStatus[index] = true;
-            } else if (diceNumber[index] == 1 && diceStatus[index] == true) {
-                selectDice(w, index, -100, false);
-                diceStatus[index] = false;
-            }
-
-            if (diceNumber[index] == 5 && diceStatus[index] == false) {
-                selectDice(w, index, 50, true);
-                diceStatus[index] = true;
-            } else if (diceNumber[index] == 5 && diceStatus[index] == true) {
-                selectDice(w, index, -50, false);
-                diceStatus[index] = false;
+            } else if (diceNumber[index] == 5 && diceStatus[index] == false) {
+                if (doubleFive) {
+                    oneOfTwoFivesSelected(w, index, 100, true);
+                    diceStatus[index] = true;
+                } else {
+                    selectDice(w, index, 50, true);
+                    diceStatus[index] = true;
+                }
             }
         }
     });
@@ -202,16 +220,43 @@ wuerfel.forEach((w, index) => {
 function areThreeSameThrown() {
     const c = [];
     diceNumber.forEach((nr, i) => {
-        c[nr] = (c[nr] || 0) + 1;
-    });
-    c.forEach((nr, i) => {
-        if (nr == 3) {
-            trippleThrown = true;
-            trippleNumber = i;
-            console.log("THREEE!");
-
+        if (diceStatus[i] != true) {
+            c[nr] = (c[nr] || 0) + 1;
         }
     });
+    //console.log(c);
+
+    c.forEach((nr, i) => {
+        if (nr >= 3) {
+            trippleThrown = true;
+            trippleNumber = i;
+            trippleChance = true;
+            anoterTrippleIsCollected = -1;
+            console.log("THREEE!");
+        }
+    });
+}
+
+function areTwoFivesThrown() {
+    if (trippleNumber != 5) {
+        fivesPos = [];
+        diceNumber.forEach((nr, i) => {
+            if (diceStatus[i] != true) {
+                if (nr == 5) {
+                    fivesPos.push(i);
+                }
+            }
+        });
+        if (fivesPos.length == 2) {
+            doubleFive = true;
+            console.log("TWO FIVES");
+        } else {
+            doubleFive = false;
+        }
+    }
+
+    //console.log(fivesPos);
+
 }
 
 //hover on Dice
@@ -221,21 +266,33 @@ wuerfel.forEach((w, index) => {
         if (diceNumber[index] == 1 && trippleNumber != 1) {
             w.style.backgroundColor = "blue";
         } else if (diceNumber[index] == 5 && trippleNumber != 5) {
-            w.style.backgroundColor = "green";
+            if (doubleFive) {
+                wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 1 + ".png";
+                wuerfel.forEach((doubl, i) => {
+                    if (fivesPos.includes(i)) {
+                        doubl.style.backgroundColor = "pink"
+                    }
+                });
+            } else {
+                w.style.backgroundColor = "green";
+            }
         } else if (trippleThrown && diceNumber[index] == trippleNumber) {
             wuerfel.forEach((trip, i) => {
                 if (diceNumber[i] == trippleNumber) {
                     trip.style.backgroundColor = "red"
                 }
             });
+        } else if (trippleChance && diceNumber[index] == trippleNumber) {
+            w.style.backgroundColor = "red";
         } else {
             w.style.backgroundColor = "gray";
         };
     });
 
     w.addEventListener("mouseleave", () => {
-        wuerfel.forEach(all => {
-            all.style.backgroundColor = "black"
+        wuerfel.forEach((w, index) => {
+            w.style.backgroundColor = "black"
+            wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + diceNumber[index] + ".png";
         });
     });
 });
@@ -265,16 +322,58 @@ function selectDice(w, i, c, isPicket) {
         takePointsButton.style.display = "none";
     }
 
-    console.log(isPointsCollected + " are points collected?");
-    
+    //console.log(isPointsCollected + " are points collected?");
+
 
     //counter
     updateCounter(c);
 }
 
+//Select one of two fives
+
+function oneOfTwoFivesSelected(w, i, c, isPicket) {
+    if (isPicket) {
+
+        //change the other Fives
+        fivesPos.forEach(pos => {
+            if (pos != i) {
+                wuerfel[pos].style.backgroundColor = "black";
+                wuerfel[pos].style.top = (window.innerHeight / 3) + "px";
+                wuerfel[pos].style.left = window.innerWidth / 2 + "px";
+                wuerfel[pos].style.transform = `rotate(0deg)`;
+                diceNumber[pos] = 0;
+                wuerfelImage[pos].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
+            }
+        });
+
+        diceNumber[i] = 1;
+        w.style.left = window.innerWidth - 50 + "px";
+        w.style.top = 20 + (collectedPos * 40) + "px";
+        w.style.transform = `rotate(0)`;
+        collectedPos++;
+        isPointsCollected++;
+    }
+
+    if (isPointsCollected != 0) {
+        takePointsButton.style.display = "block";
+    } else {
+        takePointsButton.style.display = "none";
+    }
+
+    //console.log(isPointsCollected + " are points collected?");
+
+    //counter
+    updateCounter(c);
+
+    areTwoFivesThrown();
+}
+
+
+
 //Throw Dice Input
 
 background.addEventListener("click", () => {
+
     if (firstThrow) {
         throwDice();
     } else {
@@ -286,6 +385,15 @@ background.addEventListener("click", () => {
         }
     }
     isPointsCollected = 0;
+
+    if (anoterTrippleIsCollected <= 1){
+        trippleChance = true;
+    } else {
+        trippleChance = false;
+    }
+
+    anoterTrippleIsCollected++;
+
 });
 
 //Take Points Input
@@ -393,7 +501,7 @@ window.addEventListener("resize", () => {
 //Interval
 
 function intervalFunction() {
-    console.log(trippleNumber);
+    console.log(trippleChance);
 };
 
 setInterval(intervalFunction, 1000); // jedenFrame (1ms) wird die Funktion ausgeführt
