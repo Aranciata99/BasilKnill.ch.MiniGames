@@ -41,7 +41,7 @@ require '../snippets/siteNames.php';
         <!-- <small><span id="displayWhoIsPlaying">Basil</span></small> -->
     </div>
 
-    <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 20px; left: 50%; transform: translate(-50%, 0); z-index: 9999;">TAKE POINTS</button>
+    <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 20px; left: 50%; transform: translate(-50%, 0); z-index: 999;">TAKE POINTS</button>
 
     <!-- navigation & scripts -->
 
