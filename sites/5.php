@@ -33,7 +33,8 @@ require '../snippets/siteNames.php';
         <div class="playerNamesContainer" id="playerNamesContainer">
         </div>
         <button class="buttonWhiteB" id="addPlayerButton" style="margin-top: 20px;">+</button>
-        <button class="buttonWhiteB" id="deletePlayerButton" style="margin-top: 20px;">–</button>
+        <button class="buttonWhiteB" id="deletePlayerButton" style="margin-top: 20px;">–</button> <br>
+        <p style="color: black; font-size: 0.7rem; line-height: 1.2;">Type in «C+» for <br> Computer Opponent.</p>
     </div>
 
     <div class="settingsCenter">
