@@ -30,7 +30,7 @@ let doubleFive = false;
 let fivesPos = [];
 let fiveChoice = false;
 
-let pointsNeeded = 1000;
+let pointsNeeded = 100;
 
 //count
 
@@ -598,6 +598,7 @@ function takePoints() {
         for (let i = 0; i < playerUIslots.length; i++) {
             const playerScore = document.getElementById("playerCount" + i);
             playerScore.textContent = 0;
+            playerCounts[i] = 0;
             setComputerToStart();
         }
     }
@@ -803,16 +804,11 @@ async function computerTurns() {
                     setDiceInCenter();
                     firstThrow = true;
                 } else {
-                    if (computerDecideToTrowAgain() && count <= pointsNeeded) {
-                        // console.log("Computer Throws Again");
+                    if (computerDecideToTrowAgain()) {
                         computerTurnStatus = 0;
 
-                    } else if (!computerDecideToTrowAgain() && count >= pointsNeeded) {
-                        // console.log("Computer Takes Pionts");
-                        computerTurnStatus = 2;
                     } else {
-                        // console.log("Computer Throws Again");
-                        computerTurnStatus = 0;
+                        computerTurnStatus = 2;
                     }
                 }
 
@@ -847,18 +843,23 @@ async function computerTurns() {
 
         if (computerTurnStatus == 3 && computerLoopOngoing) {
 
-            let diceAwaylable;
+            let diceAwaylable = 0;
 
             diceStatus.forEach((status, i) => {
                 if (status == false) {
-                    diceAwaylable++;
+                    if (diceNumber[i] != 5 && diceNumber[i] != 1 && diceNumber[i] != trippleNumber) {
+                        diceAwaylable++;
+                    }
                 }
             });
 
             fiveChoice = true;
 
+            //console.log(diceAwaylable);
+            
+
             wuerfel.forEach((w, index) => {
-                if (diceAwaylable == 2) {
+                if (diceAwaylable == 0) {
                     if (index == fivesPos[1]) {
                         //console.log("Pick 5");
                         pickDice(w, index);
@@ -911,19 +912,21 @@ function computerDecideToTrowAgain() {
 
         //How high is the Points
 
-        let countDevider = 2000
+        let countDevider = 5000
 
         if (count < 5000) {
             countDevider -= count;
         }
 
-        //console.log("Count" + count / countDevider);
-        possibility -= count / countDevider;
+        if (count < 1000 || playerCounts[playersTurn] > 9000) {
+            //console.log("Count" + count / countDevider);
+            possibility -= count / countDevider;
+        }
 
         //What could be thrown
 
         if (trippleChance && trippleNumber != 1 && trippleNumber != 5) {
-            possibleNumbers = 3;
+            possibleNumbers = 2;
         } else {
             possibleNumbers = 1;
         }
@@ -932,9 +935,10 @@ function computerDecideToTrowAgain() {
 
         possibility *= possibleNumbers;
 
-        //console.log("Possibility " + possibility);
+        possibility -= count / 100000;
 
-        if (count < 1200 || playerCounts[playersTurn] > 8500) {
+
+        if (count < 1200 && playerCounts[playersTurn] > 8500) {
             possibility = 0.2;
         }
 
@@ -954,11 +958,23 @@ function computerDecideToTrowAgain() {
             possibility = 10;
         }
 
+        //Points needed
+
+        if (playerCounts[playersTurn] < pointsNeeded) {
+            possibility = 10;
+        }
+
+        if (playerCounts[playersTurn] < pointsNeeded && count >= pointsNeeded && diceAwaylable != 0) {
+            possibility = 0;
+        }
+
         var randomeChanceNr = Math.random();
 
         //console.log("randomeChanceNr " + randomeChanceNr);
 
         //true –> throw again
+
+        //console.log(playersTurn + " Possibility " + possibility);
 
 
         if (randomeChanceNr < possibility) {

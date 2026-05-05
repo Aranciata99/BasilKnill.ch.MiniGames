@@ -9,6 +9,7 @@ body {
     height: 100%;
     margin: 0;
     overflow: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
     background-color: white;
     -webkit-touch-callout: none;
