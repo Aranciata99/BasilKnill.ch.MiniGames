@@ -40,7 +40,7 @@ require '../snippets/siteNames.php';
     </div>
 
     <div class="settingsCenter">
-        <p style="color: black; font-size: 2rem; line-height: 1; text-align: center;">+ <span id="currentCounter"></span></p>
+        <p>+ <span id="currentCounter"></span></p>
         <!-- <small><span id="displayWhoIsPlaying">Basil</span></small> -->
     </div>
 
