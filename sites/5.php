@@ -1,6 +1,8 @@
 <?php
 $currentPage = basename(__FILE__, '.php');
 require '../snippets/siteNames.php';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +12,7 @@ require '../snippets/siteNames.php';
     <?php
     require '../snippets/head.php';
     ?>
-    <title>10’000</title>
+    <title><?php echo $siteNames[$currentPage - 1] ?></title>
 </head>
 
 <body>
@@ -34,7 +36,7 @@ require '../snippets/siteNames.php';
         </div>
         <button class="buttonWhiteB" id="addPlayerButton" style="margin-top: 20px;">+</button>
         <button class="buttonWhiteB" id="deletePlayerButton" style="margin-top: 20px;">–</button> <br>
-        <p style="color: black; font-size: 0.7rem; line-height: 1.2;">Type in «C+» for <br> Computer Opponent.</p>
+        <p style="color: black; font-size: 0.7rem; line-height: 1.2;">Type in «+» for <br> Computer Opponent.</p>
     </div>
 
     <div class="settingsCenter">
@@ -43,6 +45,13 @@ require '../snippets/siteNames.php';
     </div>
 
     <button class='buttonWhiteB' id="takePointsButton" style="position: absolute; top: 20px; left: 50%; transform: translate(-50%, 0); z-index: 999;">TAKE POINTS</button>
+    <small id="notOutYetText" style="color: black; position: absolute; top: 20px; left: 50%; transform: translate(-50%, 0); z-index: 999;">Get 1000 first</small>
+
+    <!-- Rules -->
+
+    <?php
+    require '../snippets/siteRules.php';
+    ?>
 
     <!-- navigation & scripts -->
 

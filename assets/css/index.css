@@ -161,13 +161,6 @@ p a:hover {
     cursor: pointer;
 }
 
-input {
-    -webkit-appearance: none;
-    background: transparent;
-    background-color: black;
-    height: var(--buttonBorderSize);
-}
-
 input::-webkit-slider-thumb {
     -webkit-appearance: none;
 }
@@ -177,6 +170,14 @@ input::-webkit-slider-thumb {
     height: calc(var(--fixedGridSize)/5*3);
     border: none;
     border-bottom: var(--buttonBorderSize) solid black;
+}
+
+.bounceSettings input {
+    -webkit-appearance: none;
+    background: transparent;
+    background-color: black;
+    height: var(--buttonBorderSize);
+    border-bottom: none;
 }
 
 input:focus {
@@ -280,6 +281,13 @@ input::-ms-thumb {
     z-index: 100;
     transform: translate(-50%, 0);
 }
+.settingsLeftBottom{
+    position: absolute;
+    display: inline;
+    bottom: var(--gridSize);
+    left: var(--gridSize);
+    z-index: 100;
+}
 
 .settingsCenter small {
     position: absolute;
@@ -297,6 +305,57 @@ input::-ms-thumb {
     color: black;
     font-size: 1rem;
     line-height: 0;
+}
+
+/* rules */
+
+.rulesContainer {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    z-index: 9999;
+    background-color: rgba(200, 200, 200, 0.2);
+    backdrop-filter: blur(10px);
+    color: black;
+    overscroll-behavior: none;
+    scrollbar-width: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    transition: calc(var(--hoverSpeed)/2) ease-in-out;
+}
+
+.rulesContainer.open {
+    left: 0;
+}
+
+.rulesContainer h1{
+    color: black;
+    margin: var(--gridSize);
+    font-size: 2rem;
+}
+
+.rulesContainer p{
+    color: black;
+    margin: var(--gridSize);
+}
+
+.rulesContainer small{
+    color: black;
+    margin: var(--gridSize);
+}
+
+.closeRulesButton {
+    position: fixed;
+    top: var(--gridSize);
+    right: var(--gridSize);
 }
 
 /* Sites */

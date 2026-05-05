@@ -10,7 +10,7 @@ require '../snippets/siteNames.php';
     <?php
     require '../snippets/head.php';
     ?>
-    <title>Snake</title>
+    <title><?php echo $siteNames[$currentPage - 1] ?></title>
 </head>
 
 <body>

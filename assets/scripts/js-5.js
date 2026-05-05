@@ -1,23 +1,3 @@
-/*
-
-+
-– rules
-– Win state of a Person
-
-– – Testen – –
-
-Bugs
-– tripple Teils stehen geblieben
-– tripple fällt weg, wenn neuer Tripple?
-– Take Points gets weirldly stuck Things sometimes
-– Kollisionen manchmal komisch – Logik nochmal überdenken
-
-– Computer can pick other than dubble fives Choice
-
-Adds
-– Coice of throw all again on restart
-
-*/
 
 //Random Numbers
 
@@ -34,6 +14,7 @@ function randomFloat(min, max) {
 let diceNumber = [0, 0, 0, 0, 0];
 let diceStatus = [false, false, false, false, false];
 let diceThrowPos = [[], [], []]; //x, y, r
+let diceOldThrowPos = [[], []]; //x, y
 let collectedPos = 0;
 let collectedPosOnTrow;
 let diceInCenter = true;
@@ -49,18 +30,19 @@ let doubleFive = false;
 let fivesPos = [];
 let fiveChoice = false;
 
+let pointsNeeded = 1000;
+
 //count
 
 const currentCounter = document.getElementById("currentCounter");
 //const counter = document.getElementById("addcounter");
 let count = 0;
-//let absCounter = 0;
-updateCounter(0);
 
 //UI
 
 const background = document.getElementById("background");
 const takePointsButton = document.getElementById("takePointsButton");
+const notOutYetText = document.getElementById("notOutYetText");
 takePointsButton.style.display = "none";
 
 //players
@@ -95,9 +77,23 @@ wuerfel.forEach((w, index) => {
     wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
 });
 
+function setDiceDenterOnWindowChange() {
+    wuerfel.forEach((w, index) => {
+        w.style.backgroundColor = "black";
+        w.style.top = (window.innerHeight / 3) + (40 * index) + "px";
+        w.style.left = window.innerWidth / 2 + "px";
+        // w.style.transform = `rotate(0deg)`;
+        // wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
+    });
+}
+
+//let absCounter = 0;
+updateCounter(0);
+
 function setDiceInCenter() {
 
     takePointsButton.style.display = "none";
+
     diceInCenter = true;
 
     collectedPos = 0;
@@ -123,6 +119,12 @@ function setDiceInCenter() {
 
     setComputerToStart();
 
+    if (playerCounts[playersTurn] < pointsNeeded) {
+        notOutYetText.style.display = "block";
+    } else {
+        notOutYetText.style.display = "none";
+    }
+
 }
 
 //throwDice
@@ -130,6 +132,13 @@ function setDiceInCenter() {
 function throwDice() {
 
     takePointsButton.style.display = "none";
+
+    if (playerCounts[playersTurn] < pointsNeeded) {
+        notOutYetText.style.display = "block";
+    } else {
+        notOutYetText.style.display = "none";
+    };
+
     trippleThrown = false;
     diceInCenter = false;
 
@@ -137,6 +146,17 @@ function throwDice() {
         collectedPos = 0;
         diceStatus = [false, false, false, false, false];
     }
+
+    //old Dice Pos
+
+    wuerfel.forEach((w, index) => {
+        const wPos = w.getBoundingClientRect();
+        diceOldThrowPos[0].push(wPos.x);
+        diceOldThrowPos[1].push(wPos.y);
+    });
+
+    //new Dice Pos
+
     wuerfel.forEach((w, index) => {
         if (diceStatus[index] == false) {
             let diceCount = randomInt(1, 7);
@@ -155,13 +175,16 @@ function throwDice() {
         }
     });
 
+    //console.log(diceOldThrowPos);
+
+
     //check if a Dice is colliding with another
 
     setTimeout(() => {
 
         let collisionDirection = 1;
         let collisions = randomInt(0, 2);
-        
+
         wuerfel.forEach((w1, i1) => {
             let rect1 = w1.getBoundingClientRect();
             wuerfel.forEach((w2, i2) => {
@@ -182,8 +205,8 @@ function throwDice() {
                         collisionDirection *= -1;
                     }
 
-                    console.log("Collision D " + collisions);
-                    
+                    //console.log("Collision D " + collisions);
+
                 }
             });
 
@@ -200,6 +223,11 @@ function throwDice() {
 
     collectedPosOnTrow = collectedPos;
     firstThrow = false;
+
+    // console.log(trippleNumber);
+    // console.log(trippleChance);
+    // console.log(anoterTrippleIsCollected);
+
 }
 
 //select Dice input
@@ -284,13 +312,16 @@ function pickDice(w, index) {
                 //first
                 selectDice(w, index, 50, true);
                 diceStatus[index] = true;
+                wuerfelImage[fivesPos[1]].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 5 + ".png";
                 //second
                 selectDice(wuerfel[fivesPos[0]], fivesPos[0], 50, true);
+                wuerfelImage[fivesPos[0]].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 5 + ".png";
                 diceStatus[fivesPos[0]] = true;
                 fivesPos = [];
             }
 
             fiveChoice = false;
+            doubleFive = false;
 
             wuerfel.forEach(all => {
                 all.style.backgroundColor = "black";
@@ -320,6 +351,12 @@ function areThreeSameThrown() {
             //console.log("THREEE!");
         }
     });
+
+    if (anoterTrippleIsCollected == 1) {
+        trippleChance = false;
+        trippleNumber = 10;
+        anoterTrippleIsCollected = 3;
+    }
 }
 
 function areTwoFivesThrown() {
@@ -354,7 +391,6 @@ wuerfel.forEach((w, index) => {
                     w.style.backgroundColor = "blue";
                 } else if (diceNumber[index] == 5 && trippleNumber != 5) {
                     if (doubleFive) {
-                        wuerfelImage[index].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 1 + ".png";
                         wuerfel.forEach((doubl, i) => {
                             if (fivesPos.includes(i)) {
                                 doubl.style.backgroundColor = "pink"
@@ -424,18 +460,29 @@ function selectDice(w, i, c, isPicket) {
         isPointsCollected--;
     }
 
-    if (isPointsCollected != 0) {
-        takePointsButton.style.display = "block";
-    } else {
-        takePointsButton.style.display = "none";
-    }
-
     //console.log(isPointsCollected + " are points collected?");
 
 
     //counter
     updateCounter(c);
+
+    if (isPointsCollected != 0) {
+        if (playerCounts[playersTurn] >= pointsNeeded || count >= pointsNeeded) {
+            takePointsButton.style.display = "block";
+            notOutYetText.style.display = "none";
+        } else {
+            takePointsButton.style.display = "none";
+            notOutYetText.style.display = "block";
+        }
+    } else if (playerCounts[playersTurn] < pointsNeeded) {
+        takePointsButton.style.display = "none";
+        notOutYetText.style.display = "block";
+    } else {
+        takePointsButton.style.display = "none";
+        notOutYetText.style.display = "none";
+    }
 }
+
 
 //Select one of two fives
 
@@ -450,7 +497,6 @@ function oneOfTwoFivesSelected(w, i, c, isPicket) {
 
         //one to one
         diceNumber[fivesPos[0]] = 1;
-        wuerfel[fivesPos[0]].style.backgroundColor = "blue"
         wuerfel[fivesPos[0]].style.top = (window.innerHeight / 3) + "px";
         wuerfel[fivesPos[0]].style.left = window.innerWidth / 2 - 30 + "px";
         wuerfel[fivesPos[0]].style.transform = `rotate(0deg)`;
@@ -459,7 +505,6 @@ function oneOfTwoFivesSelected(w, i, c, isPicket) {
 
         //two to fives
         diceNumber[fivesPos[1]] = 5;
-        wuerfel[fivesPos[1]].style.backgroundColor = "green"
         wuerfel[fivesPos[1]].style.top = (window.innerHeight / 3) + "px";
         wuerfel[fivesPos[1]].style.left = window.innerWidth / 2 + 30 + "px";
         wuerfel[fivesPos[1]].style.transform = `rotate(0deg)`;
@@ -475,6 +520,21 @@ function trowInMiddle(pos) {
     wuerfel[pos].style.transform = `rotate(0deg)`;
     diceNumber[pos] = 0;
     wuerfelImage[pos].src = "../assets/wuerfelpunkte/" + wuerfelAugenFarbe + "/wuerfel" + 0 + ".png";
+    //set back tripple
+    trippleThrown = false;
+    trippleNumber;
+    trippleChance = false;
+    anoterTrippleIsCollected = 3;
+    //set back fives
+    doubleFive = false;
+    fivesPos = [];
+    fiveChoice = false;
+    //UI
+    if (playerCounts[playersTurn] >= pointsNeeded) {
+        notOutYetText.style.display = "none";
+    } else {
+        notOutYetText.style.display = "block";
+    }
 }
 
 
@@ -495,12 +555,17 @@ background.addEventListener("click", () => {
                 throwDice();
             }
         }
+
         isPointsCollected = 0;
 
         if (anoterTrippleIsCollected <= 1) {
             trippleChance = true;
         } else {
             trippleChance = false;
+        }
+
+        if (!trippleChance) {
+            trippleNumber;
         }
 
         anoterTrippleIsCollected++;
@@ -520,24 +585,48 @@ function takePoints() {
     const playerScore = document.getElementById("playerCount" + playersTurn);
     playerScore.textContent = playerCounts[playersTurn];
 
+    //win State 10000 achieved
+
+    if (playerScore.textContent >= 10000) {
+        if (playerUIinputs[playersTurn].value == "+") {
+            alert("COMPUTER NR." + (playersTurn + 1) + " WINS!");
+        } else {
+            alert(playerUIinputs[playersTurn].value + " WINS!");
+        }
+        currentCounter.textContent = 0;
+        setDiceInCenter();
+        for (let i = 0; i < playerUIslots.length; i++) {
+            const playerScore = document.getElementById("playerCount" + i);
+            playerScore.textContent = 0;
+            setComputerToStart();
+        }
+    }
+
     if (playersTurn < playerUIslots.length - 1) {
         playersTurn++;
     } else {
         playersTurn = 0;
     }
 
+
     showWhoIsPlaying();
     firstThrow = true;
 
     takePointsButton.style.display = "none";
+    notOutYetText.style.display = "none";
+
 }
 
 //Counter
 
 function updateCounter(add) {
     count += add;
-    //currentCounter.textContent = absCounter;
     currentCounter.textContent = count;
+    // if (playerCounts[playersTurn] < pointsNeeded) {
+    //     notOutYetText.style.display = "block";
+    // } else {
+    //     notOutYetText.style.display = "none";
+    // }
 }
 
 //UI
@@ -610,7 +699,7 @@ function deleteLastPlayer() {
 
 function checkPlayerNamesOfComputer() {
     playerUIinputs.forEach((slot, i) => {
-        if (slot.value == "C+") {
+        if (slot.value == "+") {
             playerComputerStatus[i] = true;
         } else {
             playerComputerStatus[i] = false;
@@ -643,9 +732,9 @@ function newComputerTurnDelay(ms) {
 
 async function computerTurns() {
 
-    console.log("Computer " + playersTurn + "Start");
-    console.log("2 5s " + doubleFive);
-    console.log("5 choice " + fiveChoice);
+    // console.log("Computer " + playersTurn + "Start");
+    // console.log("2 5s " + doubleFive);
+    // console.log("5 choice " + fiveChoice);
 
 
     computerIsPlaying = true;
@@ -714,16 +803,16 @@ async function computerTurns() {
                     setDiceInCenter();
                     firstThrow = true;
                 } else {
-                    if (computerDecideToTrowAgain()) {
-
-                        console.log("Computer Throws Again");
-
+                    if (computerDecideToTrowAgain() && count <= pointsNeeded) {
+                        // console.log("Computer Throws Again");
                         computerTurnStatus = 0;
 
-                    } else {
-                        console.log("Computer Takes Pionts");
-
+                    } else if (!computerDecideToTrowAgain() && count >= pointsNeeded) {
+                        // console.log("Computer Takes Pionts");
                         computerTurnStatus = 2;
+                    } else {
+                        // console.log("Computer Throws Again");
+                        computerTurnStatus = 0;
                     }
                 }
 
@@ -754,6 +843,8 @@ async function computerTurns() {
             break
         }
 
+        //3 = take a five of two
+
         if (computerTurnStatus == 3 && computerLoopOngoing) {
 
             let diceAwaylable;
@@ -766,37 +857,22 @@ async function computerTurns() {
 
             fiveChoice = true;
 
-            let pickOne = true;
             wuerfel.forEach((w, index) => {
-                if (index == fivesPos[0] || index == fivesPos[1]) {
-                    if (diceAwaylable == 2) {
-                        if (fivesPos[index] == 5 || fivesPos[1] == 5) {
-                            console.log("Pick 5");
-                            pickDice(w, index);
-                            pickOne = false;
-                        }
-                    } else {
-                        if (fivesPos[0] == 1 || fivesPos[1] == 1)
-                            console.log("Pick 1"); {
-                            pickDice(w, index);
-                            pickOne = false;
-                        }
+                if (diceAwaylable == 2) {
+                    if (index == fivesPos[1]) {
+                        //console.log("Pick 5");
+                        pickDice(w, index);
+                    }
+                } else {
+                    if (index == fivesPos[0]) {
+                        //console.log("Pick 1");
+                        pickDice(w, index);
                     }
                 }
             });
 
+            computerTurnStatus = 1;
 
-            if (computerDecideToTrowAgain()) {
-
-                console.log("Computer Throws Again");
-
-                computerTurnStatus = 0;
-
-            } else {
-                console.log("Computer Takes Pionts");
-
-                computerTurnStatus = 2;
-            }
         }
 
         await newComputerTurnDelay(computerTurnDelay);
@@ -858,10 +934,25 @@ function computerDecideToTrowAgain() {
 
         //console.log("Possibility " + possibility);
 
-        if (count < 750 && playerCounts[playersTurn] < 8500) {
-            possibility = 0.9;
+        if (count < 1200 || playerCounts[playersTurn] > 8500) {
+            possibility = 0.2;
         }
 
+        if (playerCounts[playersTurn] > 9500) {
+            possibility = 0.1;
+        }
+
+        if (count + playerCounts[playersTurn] >= 10000) {
+            possibility = 0;
+        }
+
+        if (playerCounts[playersTurn] <= 1000 && count >= 1000) {
+            possibility = 0;
+        }
+
+        if (diceAwaylable == 0) {
+            possibility = 10;
+        }
 
         var randomeChanceNr = Math.random();
 
@@ -888,7 +979,7 @@ function computerDecideToTrowAgain() {
 //Resize Event
 
 window.addEventListener("resize", () => {
-
+    setDiceDenterOnWindowChange();
 });
 
 //Interval
