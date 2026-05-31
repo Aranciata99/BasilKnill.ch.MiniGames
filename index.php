@@ -42,7 +42,7 @@ require './snippets/siteNames.php';
 
     <div style=" position: absolute; width: 100%;  text-align: center; bottom: 20px;">
         <small style="color: black;">
-            All code by <a style="color: black; text-decoration: underline;" href="https://basilknill.ch/">basilknill.ch</a>
+            Code by <a style="color: black; text-decoration: underline;" href="https://basilknill.ch/">basilknill.ch</a>
         </small>
     </div>
 

@@ -30,7 +30,7 @@ let doubleFive = false;
 let fivesPos = [];
 let fiveChoice = false;
 
-let pointsNeeded = 100;
+let pointsNeeded = 1000;
 
 //count
 

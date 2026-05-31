@@ -6,5 +6,6 @@ $siteNames = [ // add site by add string here
     "Snake", 
     "TicTacToe",
     "10’000",
+    "Sorting",
     ];
 ?>

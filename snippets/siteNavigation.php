@@ -6,7 +6,7 @@ $siteAmmount = count($sites);
 if ($currentPage == 1) {
     $lastPage = $siteAmmount;
     $nextPage = $currentPage + 1;
-} else if ($currentPage == $siteAmmount) {
+} else if ($currentPage == $siteAmmount - 1) {
     $lastPage = $currentPage - 1;
     $nextPage = 1;
 } else {
