@@ -633,6 +633,11 @@ input::-ms-thumb {
     flex-direction: row; /* horizontal (Standard, kann weggelassen werden) */
 }
 
+.upperPlayfield {
+    width: 60%;
+    left: 20%;
+}
+
 .underPlayfield {
     top: 50%;
     border-top: dotted black var(--buttonBorderSize);
@@ -646,16 +651,31 @@ input::-ms-thumb {
     left: 0;
 }
 
-.fillStackBox {
+.newPearlsPathContainer {
+    position: fixed;
+    width: 20%;
+    height: 50%;
+    top: 0;
+    left: 0;
+}
+
+.fillStackBox,
+.pearlsPathBox {
     position: relative;
-    width: 100px;
+    width: 50px;
     height: 250px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }   
 
-.fillStackStick {
+.pearlsPathBox {
+    top: 0%;
+    transform: translate(-50%, 0%);
+}   
+
+.fillStackStick,
+.pearlsPath {
     position: absolute;
     width: 2px;
     height: 100%;
@@ -664,11 +684,15 @@ input::-ms-thumb {
     transform: translate(-50%, 50%);
 }
 
+.pearlsPath {
+    border-right: dotted black var(--buttonBorderSize);
+}
+
 .pearls {
     position: absolute;
     width: 50px;
     height: 50px;
-    left: 50px;
+    left: 25px;
     transform: translate(-50%, 0%) scale(1);
     border-radius: 100px;
     z-index: 100;
@@ -678,6 +702,10 @@ input::-ms-thumb {
 
 .pearls.active {
     transform: translate(-50%, 0%) scale(1.2);
+}
+
+.pearls.destroy {
+    transform: translate(-50%, 0%) scale(0);
 }
 
 @media (max-width: 770px) {

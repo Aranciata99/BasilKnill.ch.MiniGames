@@ -28,12 +28,25 @@ require '../snippets/siteNames.php';
 
     ?>
 
-    <div class="upperPlayfield" id="upperPlayfield">
-        
+    <div class="newPearlsPathContainer" id="newPearlsPath">
+        <div class="pearlsPathBox" id="pearlsPathBox">
+            <div class="pearlsPath">
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="underPlayfield" id="underPlayfield">
-       
+    <div id="playField">
+        <div class="upperPlayfield" id="upperPlayfield">
+
+
+        </div>
+
+        <div class="underPlayfield" id="underPlayfield">
+
+        </div>
     </div>
 
     <!-- navigation & scripts -->
