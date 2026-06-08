@@ -674,18 +674,13 @@ input::-ms-thumb {
     transform: translate(-50%, 0%);
 }   
 
-.fillStackStick,
-.pearlsPath {
+.fillStackStick {
     position: absolute;
     width: 2px;
     height: 100%;
     bottom: 50%;
     left: 50%;
     transform: translate(-50%, 50%);
-}
-
-.pearlsPath {
-    border-right: dotted black var(--buttonBorderSize);
 }
 
 .pearls {

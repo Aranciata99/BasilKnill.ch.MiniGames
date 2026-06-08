@@ -13,48 +13,46 @@ require '../snippets/siteNames.php';
     <title><?php echo $siteNames[$currentPage - 1] ?></title>
 </head>
 
-<body>
+<body id="background">
+        <?php
 
-    <?php
+        // upper
 
-    // upper
+        $upperElements = [2, 3, 2];
+        $upperColor = ["red", "blue", "green"];
 
-    $upperElements = [2, 3, 2];
-    $upperColor = ["red", "blue", "green"];
+        // under
 
-    // under
+        $underElements = [2, 3, 2, 0, 5];
 
-    $underElements = [2, 3, 2, 0, 5];
+        ?>
 
-    ?>
+        <div class="newPearlsPathContainer" id="newPearlsPath">
+            <div class="fillStackBox" style="top: 125px;" id="pearlsPathBox">
+                <div class="fillStackStick" style="border-right: dotted black var(--buttonBorderSize);">
 
-    <div class="newPearlsPathContainer" id="newPearlsPath">
-        <div class="pearlsPathBox" id="pearlsPathBox">
-            <div class="pearlsPath">
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-    <div id="playField">
-        <div class="upperPlayfield" id="upperPlayfield">
+        <div id="playField">
+            <div class="upperPlayfield" id="upperPlayfield">
 
 
+            </div>
+
+            <div class="underPlayfield" id="underPlayfield">
+
+            </div>
         </div>
 
-        <div class="underPlayfield" id="underPlayfield">
+        <!-- navigation & scripts -->
 
-        </div>
-    </div>
-
-    <!-- navigation & scripts -->
-
-    <?php
-    require '../snippets/siteNavigation.php';
-    ?>
-
+        <?php
+        require '../snippets/siteNavigation.php';
+        ?>
 </body>
 
 </html>

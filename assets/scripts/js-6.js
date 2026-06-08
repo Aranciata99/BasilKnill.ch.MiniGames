@@ -1,12 +1,12 @@
 /*
 
-– Click aside or esc to cancel
-– If 2.Stack is full dont be possible to choose
-– Pick the pearls from waiting list
 – Unlock new Stacks with points
+– One more Stack on the right
 – Add Value to color
 – Loose State
 – Points
+– Failstate
+– more Punish
 
 Ideas
 
@@ -14,6 +14,12 @@ Ideas
 – left come new pearls
 – max 3 Sticks on top possible
 – UI When one Destroyed -Points
+– Wrong picks (stack full & wrong color = -Points)
+– more picks when in row
+
+Bugs
+
+– sometimes, the pearl on path disapear
 
 */
 
@@ -96,6 +102,10 @@ function setupPlayfield(topCount, bottomCount) {
 
 function setUpStackElements() {
 
+    //newPearlBox
+    stacksCount.push(0);
+    pearlColors.push([]);
+
     Array.from(upperPlayfield.children).forEach(stack => {
         stacksCount.push(0);
         pearlColors.push([]);
@@ -132,6 +142,7 @@ setUpStackElements();
 //initiate Stacks
 
 const stackBox = document.querySelectorAll(".fillStackBox");
+const stackContainer = document.querySelectorAll(".fillStackContainer");
 const newPearlsStackBox = document.getElementById("pearlsPathBox");
 
 //initiate Stacks
@@ -153,29 +164,73 @@ stackBox.forEach((box, index) => {
 
             //When two selected
             if (selectedBoxes[0].length >= 2) {
-                if (isPearlColorFittingTargetStack(selectedBoxes[0])) {
+                if (isPearlColorFittingTargetStack(selectedBoxes[0]) && isSecondBoxNotFull(selectedBoxes[0])) {
+                    //Spawn New Pearl
+                    spawnNewPearl(selectedBoxes[0][0] == 0);
                     //MovePearl
                     movePearlToSelectedStack(selectedBoxes[1][0], selectedBoxes[1][1]);
                     sortColorsCorrectlyNew(selectedBoxes[0][0], selectedBoxes[0][1]);
                     stacksCount[selectedBoxes[0][0]]--;
                     stacksCount[selectedBoxes[0][1]]++;
                 }
-                stackBox.forEach(allBoxes => {
-                    removeAllBlowUp(allBoxes);
-                });
-                deSelectAllBoxes();
-                selectedBoxes = [[], []];
+                selectionCanceled();
             }
         }
 
     });
 });
 
+//Escape the Selection
+
+window.addEventListener("keyup", function (event) {
+    if (event.key === "Escape") {
+        selectionCanceled();
+    }
+});
+
+const pathContainer = document.getElementById("newPearlsPath");
+const background = document.getElementById("background");
+
+stackContainer.forEach((container, index) => {
+    container.addEventListener("click", (event) => {
+        if (event.target === container) {
+            selectionCanceled();
+        }
+    });
+});
+
+pathContainer.addEventListener("click", (event) => {
+    if (event.target === pathContainer) {
+        selectionCanceled();
+    }
+});
+
+background.addEventListener("click", (event) => {
+    if (event.target === background) {
+        selectionCanceled();
+    }
+});
+
+//Escape Function
+
+function selectionCanceled() {
+    stackBox.forEach(allBoxes => {
+        removeAllBlowUp(allBoxes);
+        allBoxes.style.background = "none";
+    });
+    selectedBoxes = [[], []];
+}
+
 function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
-    let colorNrPush = pearlColors[stackNrPick].length - 1;
-    pearlColors[stackNrTarget].push(pearlColors[stackNrPick][colorNrPush]);
-    pearlColors[stackNrPick].pop();
-    //console.log(pearlColors);
+
+    if (stackNrPick != 0) {
+        let colorNrPush = pearlColors[stackNrPick].length - 1;
+        pearlColors[stackNrTarget].push(pearlColors[stackNrPick][colorNrPush]);
+        pearlColors[stackNrPick].pop();
+    } else {
+        pearlColors[stackNrTarget].push(pearlColors[0][0]);
+        pearlColors[stackNrPick].shift();
+    }
 
 }
 
@@ -184,6 +239,7 @@ function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
 function selectBox(box, i) {
 
     if (stacksCount[i] > 0 || selectedBoxes[0].length > 0) {
+
 
         if (box.style.background == "white") {
             //deselct if allready selected
@@ -209,12 +265,17 @@ function selectBox(box, i) {
     }
 }
 
-function isPearlColorFittingTargetStack(Pick) {
+function isPearlColorFittingTargetStack(pick) {
 
-    pC = pearlColors[Pick[0]].length - 1;
-    let pickedPearlColor = pearlColors[Pick[0]][pC];
+    if (pick[0] == 0) {
+        pC = 0;
+    } else {
+        pC = pearlColors[pick[0]].length - 1;
+    }
 
-    const pickedStack = stackBox[Pick[1]].querySelector(".fillStackStick");
+    let pickedPearlColor = pearlColors[pick[0]][pC];
+
+    const pickedStack = stackBox[pick[1]].querySelector(".fillStackStick");
     let pickedStackColor = pickedStack.style.background;
 
     if (pickedPearlColor == pickedStackColor || pickedStackColor == "black") {
@@ -222,6 +283,16 @@ function isPearlColorFittingTargetStack(Pick) {
     } else {
         return false
     }
+}
+
+function isSecondBoxNotFull(pick) {
+
+    if (stacksCount[pick[1]] < 5) {
+        return true
+    } else {
+        return false
+    }
+
 }
 
 //Blow & unblow pearls
@@ -240,13 +311,6 @@ function removeAllBlowUp(box) {
     });
 }
 
-//de Select Box
-function deSelectAllBoxes() {
-    stackBox.forEach(box => {
-        box.style.background = "none";
-    });
-}
-
 //Pearl Movement
 
 let waitTimeForNextStep = 400;
@@ -259,53 +323,82 @@ async function movePearlToSelectedStack(box1, box2) {
 
     pearlIsMoveing = true;
 
-    spawnNewPearl();
-
     const pearlsOfStack1 = box1.querySelectorAll(".pearls");
     const pearlsOfStack2 = box2.querySelectorAll(".pearls");
 
     let distanceToCenterLine;
     let targetPosition;
 
-    //Distances
-
-    //Center
-    const fillStackBox = document.querySelector(".fillStackBox");
-    if (box1.getBoundingClientRect().top > window.innerHeight / 2) {
-        distanceToCenterLine = (window.innerHeight / 2) - fillStackBox.getBoundingClientRect().top;
-    } else {
-        distanceToCenterLine = ((window.innerHeight / 2) - fillStackBox.getBoundingClientRect().bottom) * -1;
-    }
-    //x To next Stack
-    const distanceToNextStack = (box2.getBoundingClientRect().left + stackWidth) - (box1.getBoundingClientRect().left + stackWidth / 2);
-    //y Target
-    if (box1.getBoundingClientRect().top > window.innerHeight / 2) {
-        targetPosition = 0;
-    } else {
-        targetPosition = (window.innerHeight / 2) * -1;
-    }
-
-
-    if (box2.getBoundingClientRect().top > window.innerHeight / 2) {
-
-        pearlsOfStack2.forEach((pearl, i) => {
-            targetPosition += 50;
-        });
-    } else {
-        targetPosition = (distanceToCenterLine * 2 - pearlSize);
-        pearlsOfStack2.forEach((pearl, i) => {
-            targetPosition -= 50;
-        });
-    }
-
     //get Pearl to move
     let pearlToMove;
 
+
     pearlsOfStack1.forEach((pearl, i) => {
-        if (i == pearlsOfStack1.length - 1) {
-            pearlToMove = pearl;
+        if (box1.getBoundingClientRect().top != 0) {
+            if (i == pearlsOfStack1.length - 1) {
+                pearlToMove = pearl;
+            }
+        } else {
+            if (i == 0) {
+                pearlToMove = pearl;
+            }
         }
+
     });
+
+    //Distances
+
+    //Center
+    const fillStackBox = document.querySelector(".upperPlayfield .fillStackBox");
+
+    if (box1.getBoundingClientRect().top < window.innerHeight / 2 || box1.getBoundingClientRect().top == 0) {
+        distanceToCenterLine = ((window.innerHeight / 2) - box1.getBoundingClientRect().bottom) * -1;
+    } else {
+        distanceToCenterLine = (window.innerHeight / 2) - fillStackBox.getBoundingClientRect().top;
+    }
+
+    //x To next Stack
+    const distanceToNextStack = (box2.getBoundingClientRect().left + stackWidth) - (box1.getBoundingClientRect().left + stackWidth / 2);
+
+    //y Target
+
+    if (box1.getBoundingClientRect().top != 0) {
+
+        if (box1.getBoundingClientRect().top > window.innerHeight / 2) {
+            targetPosition = 0;
+        } else {
+            targetPosition = (window.innerHeight / 2) * -1;
+        }
+
+        if (box2.getBoundingClientRect().top > window.innerHeight / 2) {
+            pearlsOfStack2.forEach((pearl, i) => {
+                targetPosition += 50;
+            });
+        } else {
+            targetPosition = (distanceToCenterLine * 2 - pearlSize);
+            pearlsOfStack2.forEach((pearl, i) => {
+                targetPosition -= 50;
+            });
+        }
+
+    } else {
+        if (box2.getBoundingClientRect().top > window.innerHeight / 2) {
+            targetPosition = (box2.getBoundingClientRect().bottom - box1.getBoundingClientRect().bottom) * -1;
+        } else {
+            targetPosition = box1.getBoundingClientRect().bottom - fillStackBox.getBoundingClientRect().top - 50;
+        }
+
+        if (box2.getBoundingClientRect().top > window.innerHeight / 2) {
+            pearlsOfStack2.forEach((pearl, i) => {
+                targetPosition += 50;
+            });
+        } else {
+            pearlsOfStack2.forEach((pearl, i) => {
+                targetPosition -= 50;
+            });
+        }
+
+    }
 
     //movement
 
@@ -337,57 +430,69 @@ async function movePearlToSelectedStack(box1, box2) {
 function checkIfAnyStackIsFull() {
 
     stacksCount.forEach((stackCount, i) => {
-        if (stackCount == 5) {
-            const pearlsOfStack = stackBox[i].querySelectorAll(".pearls");
-            let firstColor;
-            let sameColorCount = 0;
-            pearlsOfStack.forEach((pearl, c) => {
-                if (c == 0) {
-                    firstColor = pearl.style.background;
-                    sameColorCount++;
-                } else if (pearl.style.background == firstColor) {
-                    sameColorCount++;
-                }
-            });
-
-            if (sameColorCount == 5) {
-                pearlsOfStack.forEach(pearl => {
-                    pearl.classList.add("destroy");
-                    setTimeout(function () {
-                        pearl.remove();
-                    }, 410);
-                    stacksCount[i] = 0;
-                    pearlColors[i] = [];
+        if (i != 0) {
+            if (stackCount == 5) {
+                const pearlsOfStack = stackBox[i].querySelectorAll(".pearls");
+                let firstColor;
+                let sameColorCount = 0;
+                pearlsOfStack.forEach((pearl, c) => {
+                    if (c == 0) {
+                        firstColor = pearl.style.background;
+                        sameColorCount++;
+                    } else if (pearl.style.background == firstColor) {
+                        sameColorCount++;
+                    }
                 });
+
+                if (sameColorCount == 5) {
+                    pearlsOfStack.forEach(pearl => {
+                        pearl.classList.add("destroy");
+                        setTimeout(function () {
+                            pearl.remove();
+                        }, 410);
+                        stacksCount[i] = 0;
+                        pearlColors[i] = [];
+                    });
+                }
             }
         }
     });
-
-    // stackBox.forEach(stacks => {
-    //     console.log(stacks);
-
-    // });
 }
 
 //spawn a new Pearl
 
 let pearlsOnWaiting = 0;
 
-function spawnNewPearl() {
-    const pearl = document.createElement("div");
-    // let rColor = randomInt(1, 5);
-    pearl.classList.add("pearls");
-    pearl.style.background = colors[randomInt(0, colors.length)];
-    pearl.style.bottom = newPearlsStackBox.getBoundingClientRect().height + "px";
-    newPearlsStackBox.appendChild(pearl);
-    if (pearlsOnWaiting < 5) {
-        setTimeout(function () {
-            moveNewPearlToEndOfPath(pearl);
-        }, 0);
+function spawnNewPearl(newPearlSelected) {
+    if (!newPearlSelected) {
+        const pearl = document.createElement("div");
+        let r = randomInt(0, colors.length);
+        // let rColor = randomInt(1, 5);
+        pearl.classList.add("pearls");
+        pearl.style.background = colors[r];
+        pearl.style.bottom = newPearlsStackBox.getBoundingClientRect().height + "px";
+        newPearlsStackBox.appendChild(pearl);
+
+        stacksCount[0] += 1;
+        pearlColors[0].push(colors[r]);
+
+        if (pearlsOnWaiting < 5) {
+            setTimeout(function () {
+                moveNewPearlToEndOfPath(pearl);
+            }, 0);
+        } else {
+            setTimeout(function () {
+                newPearlStackIsFull(pearl)
+            }, 0);
+        }
+
     } else {
-        setTimeout(function () {
-            newPearlStackIsFull(pearl)
-        }, 0);
+        pearlsOnWaiting--;
+        const newPearls = newPearlsStackBox.querySelectorAll(".pearls");
+
+        for (let index = 0; index < newPearls.length; index++) {
+            newPearls[index].style.bottom = index * 50 - 50 + "px";
+        }
     }
 };
 
@@ -397,18 +502,17 @@ function moveNewPearlToEndOfPath(p) {
 }
 
 function newPearlStackIsFull(newP) {
-    const pearls = newPearlsStackBox.querySelectorAll(".pearls");
-
     let pearlsNewPos = 0;
 
-    pearls.forEach((p, index) => {
+    newPearlsStackBox.querySelectorAll(".pearls").forEach((p, index) => {
         if (index == 0) {
             p.style.bottom = -100 + "px";
             p.classList.add("destroy");
             pearlsOnWaiting--;
+            stacksCount[0] -= 1;
             setTimeout(function () {
                 p.remove();
-            }, 410);
+            }, 400);
         } else if (index < 5) {
             p.style.bottom = pearlsNewPos * 50 + "px";
             pearlsNewPos++;
@@ -417,29 +521,34 @@ function newPearlStackIsFull(newP) {
         }
     });
 
+    pearlColors[0].shift();
+
 }
 
 //Update Stack after movement
 
 function updateStacks() {
 
-    const pearls = document.getElementById("playField").querySelectorAll(".pearls");
+    const pearls = document.querySelectorAll(".pearls");
     let pearlCounter = 0;
     let pos = 0;
 
+
     for (let i = 0; i < stacksCount.length; i++) {
-        if (stackBox[i].getBoundingClientRect().top > window.innerHeight / 2) {
+        if (stackBox[i].getBoundingClientRect().top > window.innerHeight / 2 || i == 0) {
             pos = 0;
         } else {
             pos = stackHeight - pearlSize;
         }
+
         for (let p = 0; p < stacksCount[i]; p++) {
             pearls[pearlCounter].style.left = 25 + "px";
             pearls[pearlCounter].style.bottom = pos + "px";
             pearls[pearlCounter].style.background = pearlColors[i][p];
             stackBox[i].appendChild(pearls[pearlCounter]);
             pearlCounter++;
-            if (stackBox[i].getBoundingClientRect().top > window.innerHeight / 2) {
+
+            if (stackBox[i].getBoundingClientRect().top > window.innerHeight / 2 || i == 0) {
                 pos += 50;
             } else {
                 pos -= 50;
