@@ -1,14 +1,20 @@
 /*
 
+– Game Design?
+
+– PointsPer Pearl UI
+– Multiplier Top stack UI
+
+– Restart - Button
+
 – Unlock new Stacks with points
-– One more Stack on the right
 – Add Value to color
 – Loose State
 – Points
 – Failstate
 – more Punish
 
-Ideas
+Ideas/Extras
 
 – When 5 on BlackStack = gets deleted and + 1
 – left come new pearls
@@ -16,6 +22,7 @@ Ideas
 – UI When one Destroyed -Points
 – Wrong picks (stack full & wrong color = -Points)
 – more picks when in row
+– On hover Stack response
 
 Bugs
 
@@ -45,12 +52,13 @@ const underPlayfield = document.getElementById("underPlayfield");
 
 //Gameplay Stats
 
-let topStackCount = 3;
+let topStackCount = 1;
 let bottomStackCount = 5;
 
 //pearls
 
 let colors = ["red", "blue", "green", "violet", "orange"];
+let pearlPoints = [5, 10, 20, 50, 100];
 pearlSize = 50; //in CSS defined
 pearlColors = [];
 
@@ -60,6 +68,15 @@ stackWidth = 50; //in CSS defined
 stackHeight = 250; //in CSS defined
 stacksCount = [];
 
+//UI
+
+const counterUI = document.getElementById("counter");
+
+//Points
+
+let points = 0;
+
+addPoints(0);
 
 function setupPlayfield(topCount, bottomCount) {
 
@@ -431,6 +448,7 @@ function checkIfAnyStackIsFull() {
 
     stacksCount.forEach((stackCount, i) => {
         if (i != 0) {
+
             if (stackCount == 5) {
                 const pearlsOfStack = stackBox[i].querySelectorAll(".pearls");
                 let firstColor;
@@ -445,18 +463,42 @@ function checkIfAnyStackIsFull() {
                 });
 
                 if (sameColorCount == 5) {
-                    pearlsOfStack.forEach(pearl => {
-                        pearl.classList.add("destroy");
-                        setTimeout(function () {
-                            pearl.remove();
-                        }, 410);
-                        stacksCount[i] = 0;
-                        pearlColors[i] = [];
-                    });
+                    removeStackOfPearls(pearlsOfStack, i, stackBox[i].getBoundingClientRect().top < window.innerHeight / 2, firstColor)
                 }
             }
         }
     });
+
+}
+
+//Remove Pearls
+
+function removeStackOfPearls(pearlsOfStack, i, isTopStack, color) {
+
+    let colorIndexOfStack = colors.indexOf(color);
+
+    pearlsOfStack.forEach(pearl => {
+        pearl.classList.add("destroy");
+        setTimeout(function () {
+            pearl.remove();
+        }, 410);
+        stacksCount[i] = 0;
+        pearlColors[i] = [];
+        if (!isTopStack) {
+            console.log(colorIndexOfStack);
+            console.log(pearlPoints[colorIndexOfStack]);
+            
+            addPoints(pearlPoints[colorIndexOfStack]);
+        } else {
+            addPoints(pearlPoints[colorIndexOfStack] * 10);
+        }
+    });
+
+    if (isTopStack) {
+        console.log("newColor");
+        const stick = stackBox[i].querySelector(".fillStackStick");
+        stick.style.background = colors[randomInt(0, colors.length)];
+    }
 }
 
 //spawn a new Pearl
@@ -555,6 +597,18 @@ function updateStacks() {
             }
         }
     }
+}
+
+//UI Function
+
+function addPoints(pointsAdded) {
+    points += pointsAdded;
+    counterUI.textContent = points;
+}
+
+function takePoints(pointsTaken) {
+    points -= pointsTaken;
+    counterUI.textContent = points;
 }
 
 //Resize Event

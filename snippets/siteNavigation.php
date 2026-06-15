@@ -4,7 +4,7 @@ $sites = glob("./*.php");
 $siteAmmount = count($sites);
 
 if ($currentPage == 1) {
-    $lastPage = $siteAmmount;
+    $lastPage = $siteAmmount - 1;
     $nextPage = $currentPage + 1;
 } else if ($currentPage == $siteAmmount - 1) {
     $lastPage = $currentPage - 1;
