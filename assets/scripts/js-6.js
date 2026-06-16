@@ -1,24 +1,18 @@
 /*
 
-– Game Design?
+– Desk : hover over feedback
 
-– PointsPer Pearl UI
-– Multiplier Top stack UI
-
-– Restart - Button
-
-– Unlock new Stacks with points
-– Add Value to color
-– Loose State
-– Points
-– Failstate
-– more Punish
+– Game Design: 
+    – Generall – how does it work expand etc?
+    – Unlock new Stacks with points
+    – Loose State
+    – Failstate
+    – more Punish
 
 Ideas/Extras
 
-– When 5 on BlackStack = gets deleted and + 1
-– left come new pearls
-– max 3 Sticks on top possible
+– Add new Pearl Button
+– Punish on pick from left stack
 – UI When one Destroyed -Points
 – Wrong picks (stack full & wrong color = -Points)
 – more picks when in row
@@ -71,12 +65,24 @@ stacksCount = [];
 //UI
 
 const counterUI = document.getElementById("counter");
+const restartButton = document.getElementById("restartGameButton");
 
 //Points
 
 let points = 0;
-
 addPoints(0);
+
+// –!– //
+// –!– //
+// –!– //
+
+//Dev Settings
+setAllPearlAndStacksOnSameColor = false;
+devSettingColor = 0;
+
+// –!– //
+// –!– //
+// –!– //
 
 function setupPlayfield(topCount, bottomCount) {
 
@@ -90,7 +96,11 @@ function setupPlayfield(topCount, bottomCount) {
 
         const fillStackStick = document.createElement("div");
         fillStackStick.classList.add("fillStackStick");
-        fillStackStick.style.background = colors[randomInt(0, colors.length)];
+        if (setAllPearlAndStacksOnSameColor) {
+            fillStackStick.style.background = colors[devSettingColor];
+        } else {
+            fillStackStick.style.background = colors[randomInt(0, colors.length)];
+        }
 
         upperPlayfield.appendChild(fillStackContainer);
         fillStackContainer.appendChild(fillStackBox);
@@ -136,11 +146,16 @@ function setUpStackElements() {
             const pearl = document.createElement("div");
             let rColor = randomInt(0, colors.length);
             pearl.classList.add("pearls");
-            pearl.style.background = colors[rColor];
             pearl.style.bottom = pos + "px";
             stack.firstChild.appendChild(pearl);
             pos += 50;
-            pearlColorStack.push(colors[rColor]);
+            if (setAllPearlAndStacksOnSameColor) {
+                pearl.style.background = colors[devSettingColor];
+                pearlColorStack.push(colors[devSettingColor]);
+            } else {
+                pearl.style.background = colors[rColor];
+                pearlColorStack.push(colors[rColor]);
+            }
         }
         pearlColors.push(pearlColorStack);
         stacksCount.push(r);
@@ -148,9 +163,12 @@ function setUpStackElements() {
 }
 
 //generate Level
+function generateNewLevel() {
+    setupPlayfield(topStackCount, bottomStackCount);
+    setUpStackElements();
+}
 
-setupPlayfield(topStackCount, bottomStackCount);
-setUpStackElements();
+generateNewLevel();
 
 //Update & Check Stacks
 
@@ -250,6 +268,14 @@ function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
     }
 
 }
+
+//mouse over Feedback
+
+//////// XXX ////////
+
+// xw.addEventListener("mouseover", () => {
+
+// });
 
 //SelectBox
 
@@ -485,12 +511,11 @@ function removeStackOfPearls(pearlsOfStack, i, isTopStack, color) {
         stacksCount[i] = 0;
         pearlColors[i] = [];
         if (!isTopStack) {
-            console.log(colorIndexOfStack);
-            console.log(pearlPoints[colorIndexOfStack]);
-            
             addPoints(pearlPoints[colorIndexOfStack]);
+            popUpPoints(pearl, pearlPoints[colorIndexOfStack]);
         } else {
             addPoints(pearlPoints[colorIndexOfStack] * 10);
+            popUpPoints(pearl, pearlPoints[colorIndexOfStack] * 10);
         }
     });
 
@@ -511,12 +536,20 @@ function spawnNewPearl(newPearlSelected) {
         let r = randomInt(0, colors.length);
         // let rColor = randomInt(1, 5);
         pearl.classList.add("pearls");
-        pearl.style.background = colors[r];
+        if (setAllPearlAndStacksOnSameColor) {
+            pearl.style.background = colors[devSettingColor];
+        } else {
+            pearl.style.background = colors[r];
+        }
         pearl.style.bottom = newPearlsStackBox.getBoundingClientRect().height + "px";
         newPearlsStackBox.appendChild(pearl);
 
         stacksCount[0] += 1;
-        pearlColors[0].push(colors[r]);
+        if (setAllPearlAndStacksOnSameColor) {
+            pearlColors[0].push(colors[devSettingColor]);
+        } else {
+            pearlColors[0].push(colors[r]);
+        }
 
         if (pearlsOnWaiting < 5) {
             setTimeout(function () {
@@ -601,6 +634,33 @@ function updateStacks() {
 
 //UI Function
 
+//points get UX
+
+function popUpPoints(pearl, points) {
+    let x = pearl.getBoundingClientRect().right + 10;
+    let y = pearl.getBoundingClientRect().bottom - 20;
+    
+    const pointPopup = document.createElement("small");
+    pointPopup.classList.add("pointsPopup");
+    pointPopup.style.left = x + "px";
+    pointPopup.style.top = y + "px";
+    document.body.appendChild(pointPopup);
+    pointPopup.textContent = points;
+
+    setTimeout(function () {
+        pointPopup.classList.add("fading");
+        y -= 50;
+        pointPopup.style.top = y + "px";
+    });
+
+    setTimeout(function () {
+        pointPopup.remove();
+    }, 1000);
+}
+
+
+//Points Counter
+
 function addPoints(pointsAdded) {
     points += pointsAdded;
     counterUI.textContent = points;
@@ -610,6 +670,30 @@ function takePoints(pointsTaken) {
     points -= pointsTaken;
     counterUI.textContent = points;
 }
+
+//Restart Button
+
+restartButton.addEventListener("click", () => {
+    //clear Arrays
+    stacksCount = [];
+    pearlColors = [];
+    selectedBoxes = [[], []];
+
+    //clear Divs
+    const allPearls = document.querySelectorAll(".pearls");
+    allPearls.forEach(pearls => {
+        pearls.remove();
+    });
+    upperPlayfield.innerHTML = "";
+    underPlayfield.innerHTML = "";
+
+    //generate
+    generateNewLevel();
+
+    //clear Points
+    points = 0;
+    counterUI.textContent = points;
+});
 
 //Resize Event
 

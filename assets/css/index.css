@@ -269,12 +269,18 @@ input::-ms-thumb {
     transform: translate(0, 0);
 }
 
-.settingsCenter {
+.settingsCenter,
+.settingsCenter100000,
+.settingsCenterSorting {
     position: fixed;
     top: var(--gridSize);
     left: 50%;
     z-index: 100;
     transform: translate(-50%, 0);
+}
+
+.settingsCenterSorting {
+    top: calc(var(--gridSize) * 1.5);
 }
 
 .settingsCenterBottom {
@@ -294,7 +300,8 @@ input::-ms-thumb {
     z-index: 100;
 }
 
-.settingsCenter small {
+.settingsCenter small .settingsCenter100000 small,
+.settingsCenterSorting small {
     position: absolute;
     color: black;
     line-height: 0;
@@ -303,7 +310,8 @@ input::-ms-thumb {
     transform: translate(-50%, 0);
 }
 
-.settingsCenter p {
+.settingsCenter p,
+.settingsCenter100000 p {
     position: relative;
     color: black;
     font-size: 2rem;
@@ -705,18 +713,30 @@ input::-ms-thumb {
 }
 
 .uiSortingContainer {
-    position: fixed;
-    width: 20%;
-    height: 50%;
+    position: absolute;
     top: 0;
     right: 0;
-    text-align: center;
+    z-index: 100;
+    padding: var(--gridSize);
 }
 
-.uiSortingContainer p {
-    padding-top: 100px;
+.uiSortingContainer p,
+.uiSortingContainer small {
+    display: inline;
     color: black;
-    text-align: center;
+}
+
+.pointsPopup {
+    position: fixed;
+    right: 50%;
+    bottom: 50%;
+    color: black;
+    opacity: 1;
+    transition: 1s ease;
+}
+
+.pointsPopup.fading {
+    opacity: 0;
 }
 
 @media (max-width: 770px) {
@@ -778,7 +798,7 @@ input::-ms-thumb {
 
     /*10000*/
 
-    .settingsCenter {
+    .settingsCenter100000 {
         position: fixed;
         top: 70%;
         left: 50%;
@@ -786,7 +806,7 @@ input::-ms-thumb {
         transform: translate(-50%, 0);
     }
 
-    .settingsCenter p {
+    .settingsCenter100000 p {
         position: relative;
         color: black;
         font-size: 2rem;

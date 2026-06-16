@@ -39,7 +39,7 @@ require '../snippets/siteNames.php';
         <p style="color: black; font-size: 0.7rem; line-height: 1.2;">Type in «+» for <br> Computer Opponent.</p>
     </div>
 
-    <div class="settingsCenter">
+    <div class="settingsCenter100000">
         <p>+ <span id="currentCounter"></span></p>
         <!-- <small><span id="displayWhoIsPlaying">Basil</span></small> -->
     </div>

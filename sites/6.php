@@ -29,30 +29,28 @@ require '../snippets/siteNames.php';
 
     <div class="newPearlsPathContainer" id="newPearlsPath">
         <div class="fillStackBox" style="top: 125px;" id="pearlsPathBox">
-            <div class="fillStackStick" style="border-right: dotted black var(--buttonBorderSize);">
-
-            </div>
-
+            <div class="fillStackStick" style="border-right: dotted black var(--buttonBorderSize);"></div>
         </div>
     </div>
 
     <div class="uiSortingContainer">
+        <small> p</small>
         <p id="counter"></p>
     </div>
 
-    <div class="settingsRight">
-        <button class="buttonWhiteB" id="addPlayerButton">RESTART</button>
+    <div class="settingsCenterBottom">
+        <button class="buttonWhiteB" id="restartGameButton">RESTART</button>
     </div>
 
     <div class="settingsLeftBottom">
-        <small style="color: red;">5</small>
-        <small style="color: blue;">10</small>
-        <small style="color: green;">20</small>
-        <small style="color: violet;">50</small>
-        <small style="color: orange;">100</small>
+        <small style="color: black;"> <span style="color: red;">●</span> 5</small>
+        <small style="color: black;"> <span style="color: blue;">●</span> 10</small>
+        <small style="color: black;"> <span style="color: green;">●</span> 20</small>
+        <small style="color: black;"> <span style="color: violet;">●</span> 50</small>
+        <small style="color: black;"> <span style="color: orange;">●</span> 100</small>
     </div>
 
-    <div class="settingsCenter">
+    <div class="settingsCenterSorting">
         <small style="color: black;">×10</small>
     </div>
     
