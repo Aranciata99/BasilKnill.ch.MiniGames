@@ -676,6 +676,7 @@ input::-ms-thumb {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
 }
 
 .pearlsPathBox {
@@ -690,6 +691,11 @@ input::-ms-thumb {
     bottom: 50%;
     left: 50%;
     transform: translate(-50%, 50%);
+    transition: 0.4s ease;
+}
+
+.fillStackStick.hover {
+    height: 120%;
 }
 
 .pearls {
@@ -738,6 +744,31 @@ input::-ms-thumb {
 .pointsPopup.fading {
     opacity: 0;
 }
+
+.lockedStickButton {
+    position: relative;
+    width: auto;
+    height: calc(var(--fixedGridSize)/5*4);
+    border-radius: 25px;
+    padding-inline: 10px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    line-height: 0;
+    padding-top: 3px;
+    margin-right: calc(var(--fixedGridSize)/6);
+    color: white;
+    border: solid black var(--buttonBorderSize);
+    background-color: black;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: 1s ease;
+}
+
+.lockedStickButton.disapear {
+    opacity: 0;
+    top: 25%;
+};
 
 @media (max-width: 770px) {
 
