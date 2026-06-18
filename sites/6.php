@@ -31,6 +31,8 @@ require '../snippets/siteNames.php';
         <div class="fillStackBox" style="top: 125px;" id="pearlsPathBox">
             <div class="fillStackStick" style="border-right: dotted black var(--buttonBorderSize);"></div>
         </div>
+        <button class="newPearlButton" id="newPearlButton">+</button>
+        <div id="targetRemovePointsUI" style="background-color: none; position: absolute; top: 250px; right: 75px; height: 10px;width: 10px;"></div>
     </div>
 
     <div class="uiSortingContainer">

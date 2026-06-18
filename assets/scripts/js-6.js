@@ -1,18 +1,14 @@
 /*
 
-!
-
-– Add new Pearl Button
-– Lose Points when newPearlstck is full and a new one spwans
-
 Ideas/Extras
 
-– Wrong picks (stack full & wrong color = -Points)
 – more picks when in row
 – Highscore
 – show when lock is ready
 – check if pickets can be picked when locked
 – show color of stack thab would be unlocked 
+
+– UI On clicks
 
 – Balanceing
 
@@ -68,6 +64,7 @@ stackStatus = [[true, false, true, false, true, true, true, true, true], [0], [0
 
 const counterUI = document.getElementById("counter");
 const restartButton = document.getElementById("restartGameButton");
+const newPearlButton = document.getElementById("newPearlButton");
 
 //Points
 
@@ -81,7 +78,7 @@ let lockMultiplicator = 2;
 
 //Dev Settings
 setAllPearlAndStacksOnSameColor = false;
-devSettingColor = 4;
+devSettingColor = 1;
 
 // –!– //
 // –!– //
@@ -296,10 +293,10 @@ function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
 
 stackBox.forEach((box, i) => {
     if (stacksCount[i] > 0) {
-            box.addEventListener("mouseenter", () => {
-                stick = box.querySelector(".fillStackStick");
-                stick.classList.add("hover");
-            });
+        box.addEventListener("mouseenter", () => {
+            stick = box.querySelector(".fillStackStick");
+            stick.classList.add("hover");
+        });
         box.addEventListener("mouseleave", () => {
             stick = box.querySelector(".fillStackStick");
             stick.classList.remove("hover");
@@ -418,6 +415,22 @@ async function movePearlToSelectedStack(box1, box2) {
         }
 
     });
+
+    //get Point from newPealrs stack
+    if (box1.id == "pearlsPathBox") {
+
+        colors.forEach((c, ci) => {
+            if (c == pearlToMove.style.background) {
+                addPoints(pearlPoints[ci]);
+                popUpPoints(target, pearlPoints[ci], colors[ci]);
+            }
+
+        });
+
+
+        // addPoints(pearlPoints[colorIndexOfStack]);
+        // popUpPoints(pearl, pearlPoints[colorIndexOfStack]);
+    }
 
     //Distances
 
@@ -569,8 +582,12 @@ function removeStackOfPearls(pearlsOfStack, i, isTopStack, color) {
 //spawn a new Pearl
 
 let pearlsOnWaiting = 0;
+let pearlIsSpawned = false;
 
 function spawnNewPearl(newPearlSelected) {
+
+    pearlIsSpawned = true;
+
     if (!newPearlSelected) {
         const pearl = document.createElement("div");
         let r = randomInt(0, colors.length);
@@ -609,12 +626,18 @@ function spawnNewPearl(newPearlSelected) {
             newPearls[index].style.bottom = index * 50 - 50 + "px";
         }
     }
+
+    setTimeout(function () {
+        pearlIsSpawned = false;
+    }, 500);
 };
 
 function moveNewPearlToEndOfPath(p) {
     p.style.bottom = 50 * pearlsOnWaiting + "px";
     pearlsOnWaiting++;
 }
+
+const target = document.getElementById("targetRemovePointsUI");
 
 function newPearlStackIsFull(newP) {
     let pearlsNewPos = 0;
@@ -625,6 +648,18 @@ function newPearlStackIsFull(newP) {
             p.classList.add("destroy");
             pearlsOnWaiting--;
             stacksCount[0] -= 1;
+            //TakePearlPoints
+
+            // colors.forEach((c, ci) => {
+            //     if (c == p.style.background) {
+            //         takePoints(pearlPoints[ci]);
+            //         popUpPoints(target, pearlPoints[ci] * -1, "darkred");
+            //         console.log(p);
+            //     }
+
+            // });
+
+            //Delete Pearl
             setTimeout(function () {
                 p.remove();
             }, 400);
@@ -701,7 +736,7 @@ function unlockStack(box, index) {
     lock.remove();
 
     stackStatus[0][index] = true;
-    takePoints(stackStatus[2][index])
+    //takePoints(stackStatus[2][index])
     stackStatus[2][index] = 0;
 
     console.log(stackStatus);
@@ -711,7 +746,7 @@ function unlockStack(box, index) {
 
 //points get UX
 
-function popUpPoints(pearl, points) {
+function popUpPoints(pearl, points, color) {
     let x = pearl.getBoundingClientRect().right + 10;
     let y = pearl.getBoundingClientRect().bottom - 20;
 
@@ -719,6 +754,7 @@ function popUpPoints(pearl, points) {
     pointPopup.classList.add("pointsPopup");
     pointPopup.style.left = x + "px";
     pointPopup.style.top = y + "px";
+    pointPopup.style.color = color;
     document.body.appendChild(pointPopup);
     pointPopup.textContent = points;
 
@@ -730,9 +766,8 @@ function popUpPoints(pearl, points) {
 
     setTimeout(function () {
         pointPopup.remove();
-    }, 1000);
+    }, 400);
 }
-
 
 //Points Counter
 
@@ -743,15 +778,28 @@ function addPoints(pointsAdded) {
 
 function takePoints(pointsTaken) {
     points -= pointsTaken;
-    counterUI.textContent = points;
+    if (points > 0) {
+        counterUI.textContent = points;
+    } else {
+        points = 0;
+        counterUI.textContent = points;
+    }
 }
+
+//spawn new pearl Button
+
+newPearlButton.addEventListener("click", () => {
+    if (!pearlIsSpawned) {
+        spawnNewPearl();
+    };
+});
 
 //Restart Button
 
 restartButton.addEventListener("click", () => {
-    
+
     location.reload();
-    
+
     // //clear Arrays
     // stacksCount = [];
     // pearlColors = [];

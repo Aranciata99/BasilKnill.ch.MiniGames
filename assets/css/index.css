@@ -768,7 +768,30 @@ input::-ms-thumb {
 .lockedStickButton.disapear {
     opacity: 0;
     top: 25%;
-};
+}
+
+.newPearlButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 30px;
+    width: 30px;
+    margin: calc(var(--fixedGridSize) * 2);
+    z-index: 99999;
+    cursor: pointer;
+    border-radius: 100%;
+    background-color: 0;
+    color: black;
+    border: solid black var(--buttonBorderSize);
+    background-color: white;
+    transition: 0.4s ease;
+    transform: translate(50%, -50%);
+}
+
+.newPearlButton:hover {
+    height: 50px;
+    width: 50px;
+}
 
 @media (max-width: 770px) {
 
