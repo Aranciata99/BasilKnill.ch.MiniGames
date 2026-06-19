@@ -1,26 +1,7 @@
 /*
 
-Ideas/Extras
-
-– Try 
-    – increase difficulty
-    – to spawn new pearl each turn 
-    – have from the beginning full row and need to pick (no Add Button) 
-– more picks when in row
+– Responsif
 – Highscore
-– show when lock is ready
-– check if pickets can be picked when locked
-– show color of stack thab would be unlocked 
-
-– UI On clicks
-
-– Balanceing
-
-Bugs
-
-– Responmsif
-– Hover only when stack unlocked?!
-
 
 */
 
@@ -68,7 +49,7 @@ stackStatus = [[true, false, true, false, true, true, true, true, true], [0], [0
 
 const counterUI = document.getElementById("counter");
 const restartButton = document.getElementById("restartGameButton");
-const newPearlButton = document.getElementById("newPearlButton");
+// const newPearlButton = document.getElementById("newPearlButton");
 
 //Points
 
@@ -108,7 +89,7 @@ function setupPlayfield(topCount, bottomCount) {
             fillStackStick.style.background = colors[devSettingColor];
             stackStatus[1].push(colors[devSettingColor]);
         } else {
-            let rColor = colors[randomInt(0, colors.length)];
+            let rColor = randomNotSameColor();
             fillStackStick.style.background = rColor;
             stackStatus[1].push(rColor);
         }
@@ -234,8 +215,13 @@ stackBox.forEach((box, index) => {
                     selectionCanceled();
                 }
             } else {
+
+                //stack is locked
+
                 if (stackStatus[2][index] <= points) {
                     unlockStack(box, index);
+                } else {
+                    shakeLockError(box, index);
                 }
             }
         }
@@ -547,11 +533,11 @@ function checkIfAnyStackIsFull() {
                     removeStackOfPearls(pearlsOfStack, i, stackBox[i].getBoundingClientRect().top < window.innerHeight / 2, firstColor)
                     if (stackBox[i].getBoundingClientRect().top < window.innerHeight / 2) {
                         setTimeout(function () {
-                            lockStack(stackBox[i], i, points + randomInt(50, 1000) * lockMultiplicator)
+                            lockStack(stackBox[i], i, Math.floor(points + randomInt(50, 1000) * lockMultiplicator))
                         }, 450);
                     } else {
                         setTimeout(function () {
-                            lockStack(stackBox[i], i, randomInt(points + 5, (points + 50) * lockMultiplicator))
+                            lockStack(stackBox[i], i, Math.floor(points + randomInt(5, 100) * lockMultiplicator))
                         }, 450);
                     }
                 }
@@ -584,11 +570,20 @@ function removeStackOfPearls(pearlsOfStack, i, isTopStack, color) {
     });
 
     if (isTopStack) {
-        stackStatus[1][i] = colors[randomInt(0, colors.length)]
-        // console.log("newColor");
-        // const stick = stackBox[i].querySelector(".fillStackStick");
-        // stick.style.background = colors[randomInt(0, colors.length)];
+        stackStatus[1][i] = randomNotSameColor();
     }
+}
+
+//random Color But not same
+
+function randomNotSameColor() {
+    let newColorOfStack;
+    do {
+        newColorOfStack = colors[randomInt(0, colors.length)];
+
+    } while (stackStatus[1].includes(newColorOfStack));
+
+    return newColorOfStack;
 }
 
 //spawn a new Pearl
@@ -600,7 +595,20 @@ function spawnNewPearl(newPearlSelected) {
 
     pearlIsSpawned = true;
 
-    if (!newPearlSelected) {
+    //If Statement = only spawn when not from new stack
+
+    if (pearlsOnWaiting < 5 || newPearlSelected) {
+
+        if (newPearlSelected) {
+            pearlsOnWaiting--;
+            const newPearls = newPearlsStackBox.querySelectorAll(".pearls");
+
+            for (let index = 0; index < newPearls.length; index++) {
+                newPearls[index].style.bottom = index * 50 - 50 + "px";
+            }
+        }
+
+        //if (!newPearlSelected) {
         const pearl = document.createElement("div");
         let r = randomInt(0, colors.length);
         // let rColor = randomInt(1, 5);
@@ -620,24 +628,34 @@ function spawnNewPearl(newPearlSelected) {
             pearlColors[0].push(colors[r]);
         }
 
-        if (pearlsOnWaiting < 5) {
-            setTimeout(function () {
-                moveNewPearlToEndOfPath(pearl);
-            }, 0);
-        } else {
-            setTimeout(function () {
-                newPearlStackIsFull(pearl)
-            }, 0);
-        }
+        // if stack shoul not add
+        setTimeout(function () {
+            moveNewPearlToEndOfPath(pearl);
+        }, 0);
 
-    } else {
-        pearlsOnWaiting--;
-        const newPearls = newPearlsStackBox.querySelectorAll(".pearls");
 
-        for (let index = 0; index < newPearls.length; index++) {
-            newPearls[index].style.bottom = index * 50 - 50 + "px";
-        }
     }
+
+    //check if stack is full
+
+    // if (pearlsOnWaiting < 5) {
+    //     setTimeout(function () {
+    //         moveNewPearlToEndOfPath(pearl);
+    //     }, 0);
+    // } else {
+    //     setTimeout(function () {
+    //         newPearlStackIsFull(pearl)
+    //     }, 0);
+    // }
+
+    //} else {
+    //     pearlsOnWaiting--;
+    //     const newPearls = newPearlsStackBox.querySelectorAll(".pearls");
+
+    //     for (let index = 0; index < newPearls.length; index++) {
+    //         newPearls[index].style.bottom = index * 50 - 50 + "px";
+    //     }
+    // }
 
     setTimeout(function () {
         pearlIsSpawned = false;
@@ -759,6 +777,16 @@ function unlockStack(box, index) {
     // console.log(stackStatus);
 }
 
+function shakeLockError(box, index) {
+    const lock = box.querySelector(".lockedStickButton");
+    lock.classList.add("shakeAnimation");
+
+    setTimeout(function () {
+        lock.classList.remove("shakeAnimation");
+    }, 400);
+
+}
+
 //UI Function
 
 //points get UX
@@ -811,23 +839,20 @@ function takePoints(pointsTaken) {
 
 function updateDifficulty() {
 
-    if (points > 1000) {
-        lockMultiplicator = Math.floor(points / 100);
-    } else {
-        lockMultiplicator = 1;
-    }
+    let difficultyPoints = points / 5000;
+    lockMultiplicator = 1 + difficultyPoints;
 
-    console.log(lockMultiplicator);
-    
+    console.log(difficultyPoints + " " + lockMultiplicator);
+
 }
 
 //spawn new pearl Button
 
-newPearlButton.addEventListener("click", () => {
-    if (!pearlIsSpawned) {
-        spawnNewPearl();
-    };
-});
+// newPearlButton.addEventListener("click", () => {
+//     if (!pearlIsSpawned) {
+//         spawnNewPearl();
+//     };
+// });
 
 //Restart Button
 
@@ -835,26 +860,6 @@ restartButton.addEventListener("click", () => {
 
     location.reload();
 
-    // //clear Arrays
-    // stacksCount = [];
-    // pearlColors = [];
-    // selectedBoxes = [[], []];
-    // stackStatus = [[false, false, true, false, true, true, true, true, true], [0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
-
-    // //clear Divs
-    // const allPearls = document.querySelectorAll(".pearls");
-    // allPearls.forEach(pearls => {
-    //     pearls.remove();
-    // });
-    // upperPlayfield.innerHTML = "";
-    // underPlayfield.innerHTML = "";
-
-    // //generate
-    // generateNewLevel();
-
-    // //clear Points
-    // points = 0;
-    // counterUI.textContent = points;
 });
 
 //Resize Event
@@ -869,5 +874,5 @@ function intervalFunction() {
     // console.log(stacksCount);
 };
 
-setInterval(intervalFunction, 2000); // jedenFrame (1ms) wird die Funktion ausgeführt
+setInterval(intervalFunction, 5000); // jedenFrame (1ms) wird die Funktion ausgeführt
 

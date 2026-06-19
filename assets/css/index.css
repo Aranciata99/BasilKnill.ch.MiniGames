@@ -765,6 +765,35 @@ input::-ms-thumb {
     transition: 1s ease;
 }
 
+.shakeAnimation {
+    animation-name: shake;
+    animation-duration: 0.1s;
+    animation-timing-function: ease;
+    animation-iteration-count: 4;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(-50%, -50%);
+    }
+
+    25% {
+        transform: translate(-30%, -50%);
+    }
+
+    50% {
+        transform: translate(-50%, -50%);
+    }
+
+    75% {
+        transform: translate(-70%, -50%);
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
 .lockedStickButton.disapear {
     opacity: 0;
     top: 25%;
