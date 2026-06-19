@@ -53,7 +53,7 @@ require '../snippets/siteNames.php';
     </div>
 
     <div class="settingsCenterSorting">
-        <small style="color: black;">×10</small>
+        <small style="color: black;">×<span id="topStackMultiplier"></span></small>
     </div>
     
     <div id="playField">

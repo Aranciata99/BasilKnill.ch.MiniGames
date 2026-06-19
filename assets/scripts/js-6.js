@@ -2,6 +2,10 @@
 
 Ideas/Extras
 
+– Try 
+    – increase difficulty
+    – to spawn new pearl each turn 
+    – have from the beginning full row and need to pick (no Add Button) 
 – more picks when in row
 – Highscore
 – show when lock is ready
@@ -69,8 +73,12 @@ const newPearlButton = document.getElementById("newPearlButton");
 //Points
 
 let points = 0;
+let lockMultiplicator = 1;
+let topStackMultiplier = 5;
 addPoints(0);
-let lockMultiplicator = 2;
+
+const topStackMultiplierText = document.getElementById("topStackMultiplier");
+topStackMultiplierText.textContent = topStackMultiplier;
 
 // –!– //
 // –!– //
@@ -111,7 +119,7 @@ function setupPlayfield(topCount, bottomCount) {
 
         //lock Stacks up
         if (!stackStatus[0][index + 1]) {
-            lockStack(fillStackBox, index + 1, points + randomInt(50, 1000))
+            lockStack(fillStackBox, index + 1, randomInt(50, 1000))
         }
     }
 
@@ -135,7 +143,7 @@ function setupPlayfield(topCount, bottomCount) {
 
         //lock Stacks up
         if (!stackStatus[0][index + 4]) {
-            lockStack(fillStackBox, index + 4, points + randomInt(5, 100))
+            lockStack(fillStackBox, index + 4, randomInt(5, 100))
         }
     }
 }
@@ -292,16 +300,20 @@ function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
 //mouse over Feedback
 
 stackBox.forEach((box, i) => {
-    if (stacksCount[i] > 0) {
-        box.addEventListener("mouseenter", () => {
+    // console.log(box);
+    box.addEventListener("mouseenter", () => {
+        if (stacksCount[i] > 0) {
             stick = box.querySelector(".fillStackStick");
             stick.classList.add("hover");
-        });
-        box.addEventListener("mouseleave", () => {
+        }
+
+    });
+    box.addEventListener("mouseleave", () => {
+        if (stacksCount[i] > 0) {
             stick = box.querySelector(".fillStackStick");
             stick.classList.remove("hover");
-        });
-    }
+        }
+    });
 });
 
 //SelectBox
@@ -535,11 +547,11 @@ function checkIfAnyStackIsFull() {
                     removeStackOfPearls(pearlsOfStack, i, stackBox[i].getBoundingClientRect().top < window.innerHeight / 2, firstColor)
                     if (stackBox[i].getBoundingClientRect().top < window.innerHeight / 2) {
                         setTimeout(function () {
-                            lockStack(stackBox[i], i, points + randomInt(50, 1000))
+                            lockStack(stackBox[i], i, points + randomInt(50, 1000) * lockMultiplicator)
                         }, 450);
                     } else {
                         setTimeout(function () {
-                            lockStack(stackBox[i], i, points + randomInt(1, 10))
+                            lockStack(stackBox[i], i, randomInt(points + 5, (points + 50) * lockMultiplicator))
                         }, 450);
                     }
                 }
@@ -566,8 +578,8 @@ function removeStackOfPearls(pearlsOfStack, i, isTopStack, color) {
             addPoints(pearlPoints[colorIndexOfStack]);
             popUpPoints(pearl, pearlPoints[colorIndexOfStack]);
         } else {
-            addPoints(pearlPoints[colorIndexOfStack] * 10);
-            popUpPoints(pearl, pearlPoints[colorIndexOfStack] * 10);
+            addPoints(pearlPoints[colorIndexOfStack] * topStackMultiplier);
+            popUpPoints(pearl, pearlPoints[colorIndexOfStack] * topStackMultiplier);
         }
     });
 
@@ -716,14 +728,16 @@ function lockStack(box, index, cost) {
 
     const lock = document.createElement("button");
     lock.classList.add("lockedStickButton");
+    lock.style.background = stackStatus[1][index];
+    lock.style.border = "solid " + stackStatus[1][index] + " var(--buttonBorderSize)";
 
-    lock.textContent = cost * lockMultiplicator;
+    lock.textContent = cost;
     stackStatus[0][index] = false;
-    stackStatus[2][index] = cost * lockMultiplicator;
+    stackStatus[2][index] = cost;
 
     stick.appendChild(lock);
 
-    console.log(stackStatus);
+    // console.log(stackStatus);
 }
 
 function unlockStack(box, index) {
@@ -733,13 +747,16 @@ function unlockStack(box, index) {
 
     const lock = box.querySelector(".lockedStickButton");
     lock.classList.add("disapear");
-    lock.remove();
+
+    setTimeout(function () {
+        lock.remove();
+    }, 1000);
 
     stackStatus[0][index] = true;
     //takePoints(stackStatus[2][index])
     stackStatus[2][index] = 0;
 
-    console.log(stackStatus);
+    // console.log(stackStatus);
 }
 
 //UI Function
@@ -774,6 +791,8 @@ function popUpPoints(pearl, points, color) {
 function addPoints(pointsAdded) {
     points += pointsAdded;
     counterUI.textContent = points;
+
+    updateDifficulty();
 }
 
 function takePoints(pointsTaken) {
@@ -784,6 +803,22 @@ function takePoints(pointsTaken) {
         points = 0;
         counterUI.textContent = points;
     }
+
+    updateDifficulty();
+}
+
+//difficulty
+
+function updateDifficulty() {
+
+    if (points > 1000) {
+        lockMultiplicator = Math.floor(points / 100);
+    } else {
+        lockMultiplicator = 1;
+    }
+
+    console.log(lockMultiplicator);
+    
 }
 
 //spawn new pearl Button
@@ -831,7 +866,7 @@ window.addEventListener("resize", () => {
 //Interval
 
 function intervalFunction() {
-
+    // console.log(stacksCount);
 };
 
 setInterval(intervalFunction, 2000); // jedenFrame (1ms) wird die Funktion ausgeführt
