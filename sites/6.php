@@ -28,7 +28,7 @@ require '../snippets/siteNames.php';
     ?>
 
     <div class="newPearlsPathContainer" id="newPearlsPath">
-        <div class="fillStackBox" style="top: 125px;" id="pearlsPathBox">
+        <div class="fillStackBox" id="pearlsPathBox">
             <div class="fillStackStick" style="border-right: dotted black var(--buttonBorderSize);"></div>
         </div>
         <!-- <button class="newPearlButton" id="newPearlButton">+</button> -->
@@ -40,16 +40,16 @@ require '../snippets/siteNames.php';
         <p id="counter"></p>
     </div>
 
-    <div class="settingsCenterBottom">
+    <div class="settingsCenterBottom" id="sortingRestartButton">
         <button class="buttonWhiteB" id="restartGameButton">RESTART</button>
     </div>
 
-    <div class="settingsLeftBottom">
-        <small style="color: black;"> <span style="color: red;">●</span> 5</small>
-        <small style="color: black;"> <span style="color: blue;">●</span> 10</small>
-        <small style="color: black;"> <span style="color: green;">●</span> 20</small>
-        <small style="color: black;"> <span style="color: violet;">●</span> 50</small>
-        <small style="color: black;"> <span style="color: orange;">●</span> 100</small>
+    <div class="settingsLeftBottom" id="sortingColorValue">
+        <small> <span style="color: red;">●</span> 5</small>
+        <small> <span style="color: blue;">●</span> 10</small>
+        <small> <span style="color: green;">●</span> 20</small>
+        <small> <span style="color: violet;">●</span> 50</small>
+        <small> <span style="color: orange;">●</span> 100</small>
     </div>
 
     <div class="settingsCenterSorting">

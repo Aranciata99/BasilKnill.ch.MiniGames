@@ -668,6 +668,10 @@ input::-ms-thumb {
     left: 0;
 }
 
+#pearlsPathBox {
+    top: 125px;
+}
+
 .fillStackBox,
 .pearlsPathBox {
     position: relative;
@@ -822,6 +826,19 @@ input::-ms-thumb {
     width: 50px;
 }
 
+#sortingColorValue {
+    bottom: var(--fixedGridSize);
+}
+
+#sortingColorValue small {
+    color: black;
+}
+
+#sortingRestartButton {
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
 @media (max-width: 770px) {
 
     :root {
@@ -897,4 +914,33 @@ input::-ms-thumb {
         text-align: center;
     }
 
+    /* Sorting */
+    .fillStackBox,
+    .pearlsPathBox {
+        width: 50px;
+        height: 200px;
+    }
+
+    .pearls {
+        width: 40px;
+        height: 40px;
+    }
+
+    #pearlsPathBox {
+        top: 100px;
+    }
+
+    #sortingColorValue {
+        bottom: 50%;
+        opacity: 1;
+    }
+
+    #sortingColorValue small {
+        color: lightgray;
+    }
+
+    #sortingRestartButton {
+        left: var(--gridSize);
+        transform: translate(0%, 0);
+    }
 }
