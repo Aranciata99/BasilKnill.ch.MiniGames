@@ -1,10 +1,3 @@
-/*
-
-– Highscore
-
-*/
-
-
 //Random Numbers
 
 function randomInt(min, max) {
@@ -243,11 +236,17 @@ stackBox.forEach((box, index) => {
     //hover
 
     box.addEventListener("mouseenter", () => {
-        moueseoverStick(box, index);
+        if (stacksCount[index] > 0 && window.innerWidth > 900) {
+            stick = box.querySelector(".fillStackStick");
+            stick.classList.add("hover");
+        }
     });
 
     box.addEventListener("mouseleave", () => {
-        moueseoverStick(box, index);
+        if (stacksCount[index] > 0 && window.innerWidth > 900) {
+            stick = box.querySelector(".fillStackStick");
+            stick.classList.remove("hover");
+        }
     });
 
 });
@@ -302,16 +301,6 @@ function sortColorsCorrectlyNew(stackNrPick, stackNrTarget) {
     } else {
         pearlColors[stackNrTarget].push(pearlColors[0][0]);
         pearlColors[stackNrPick].shift();
-    }
-
-}
-
-//mouse over Feedback
-
-function moueseoverStick(box, i) {
-    if (stacksCount[i] > 0 && window.innerWidth > 900) {
-        stick = box.querySelector(".fillStackStick");
-        stick.classList.toggle("hover");
     }
 
 }
@@ -847,13 +836,14 @@ restartButton.addEventListener("click", () => {
 //Resize Event
 
 window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) {
+    if (window.innerWidth > 770) {
         pearlSize = 50;
         stackHeight = 250
     } else {
         pearlSize = 40;
         stackHeight = 200
     }
+    updateStacks();
 });
 
 //Interval
@@ -862,5 +852,5 @@ function intervalFunction() {
     // console.log(stacksCount);
 };
 
-setInterval(intervalFunction, 5000); // jedenFrame (1ms) wird die Funktion ausgeführt
+// setInterval(intervalFunction, 5000); // jedenFrame (1ms) wird die Funktion ausgeführt
 

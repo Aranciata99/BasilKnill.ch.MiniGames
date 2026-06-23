@@ -44,7 +44,7 @@ require '../snippets/siteNames.php';
         <button class="buttonWhiteB" id="restartGameButton">RESTART</button>
     </div>
 
-    <div class="settingsLeftBottom" id="sortingColorValue">
+    <div class="settingsLeftBottom" id="sortingColorValue" style="z-index: 0;">
         <small> <span style="color: red;">●</span> 5</small>
         <small> <span style="color: blue;">●</span> 10</small>
         <small> <span style="color: green;">●</span> 20</small>
