@@ -300,6 +300,10 @@ input::-ms-thumb {
     z-index: 100;
 }
 
+.settingsCenter small {
+    color: black;
+}
+
 .settingsCenter small .settingsCenter100000 small,
 .settingsCenterSorting small {
     position: absolute;
@@ -401,16 +405,20 @@ input::-ms-thumb {
     text-align: center;
 }
 
-/* 1 - Bounce */
+/* 1 - Uniqeness */
 
-.container {
-    padding-inline: 20px;
-    padding-bottom: 0;
+.uniqInputForm {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
-.containerBottom {
-    padding-inline: 20px;
-    padding-top: 100%;
+.uniqTextInput {
+    text-align: center;
+    border: none;
+    font-size: 5vmin;
 }
 
 /* 2 – Puzzle */

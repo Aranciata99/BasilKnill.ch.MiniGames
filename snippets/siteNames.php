@@ -1,7 +1,7 @@
 <?php
 
 $siteNames = [ // add site by add string here
-    "Bounce", 
+    "Uniqueness", 
     "Puzzle", 
     "Snake", 
     "TicTacToe",
