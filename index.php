@@ -20,7 +20,12 @@ require './snippets/siteNames.php';
     ?>
 
     <div class="inhaltsverzeichnisRandom">
-        <button id="radnomButton" class="buttonBlackA" onclick="location.href='sites/<?php echo rand(1, $siteAmmount); ?>.php'">Random</button> <br>
+        <button id="radnomButton" class="buttonBlackA" onclick="location.href='sites/<?php echo rand(1, $siteAmmount - 1); ?>.php'">Random</button> <br>
+    </div>
+
+    <div class="settings">
+        <button class="buttonBlackA" style="position: absolute; top: 0; opacity: 1; display: block;" id="indexSortButton">Sort</button>
+
     </div>
 
     <div class="inhaltsverzeichnis">
